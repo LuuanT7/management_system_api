@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Temporariamente desabilitado para o build do Docker
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "erd.png"
+//   format   = "png"
+// }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tokens    Token[]
+
+  student  Student?
+  teacher  Teacher?
+  guardian Guardian?
+}
+
+model Token {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  type      String
+  expires   DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Guardian {
+  id       String    @id @default(uuid())
+  userId   String    @unique
+  user     User      @relation(fields: [userId], references: [id])
+  students Student[]
+  payments Payment[]
+}
+
+model Student {
+  id          String       @id @default(uuid())
+  userId      String       @unique
+  guardianId  String
+  user        User         @relation(fields: [userId], references: [id])
+  guardian    Guardian     @relation(fields: [guardianId], references: [id])
+  enrollments Enrollment[]
+  attendance  Attendance[]
+}
+
+model Teacher {
+  id      String  @id @default(uuid())
+  userId  String  @unique
+  user    User    @relation(fields: [userId], references: [id])
+  classes Class[]
+}
+
+model Class {
+  id          String       @id @default(uuid())
+  name        String
+  subject     String
+  schedule    String
+  teacherId   String
+  teacher     Teacher      @relation(fields: [teacherId], references: [id])
+  enrollments Enrollment[]
+  attendance  Attendance[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  studentId  String
+  classId    String
+  enrolledAt DateTime @default(now())
+  active     Boolean  @default(true)
+  student    Student  @relation(fields: [studentId], references: [id])
+  class      Class    @relation(fields: [classId], references: [id])
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  studentId String
+  classId   String
+  date      DateTime
+  present   Boolean
+  student   Student  @relation(fields: [studentId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id])
+}
+
+model Payment {
+  id         String    @id @default(uuid())
+  guardianId String
+  amount     Float
+  dueDate    DateTime
+  paid       Boolean   @default(false)
+  paidAt     DateTime?
+  guardian   Guardian  @relation(fields: [guardianId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  GUARDIAN
+}

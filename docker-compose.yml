@@ -1,0 +1,65 @@
+services:
+  #NODE
+
+  node_management_system_container:
+    build:
+      context: .
+      dockerfile: docker/node22/Dockerfile.dev
+    env_file: .env
+    volumes:
+      - .:/app
+      - node-modules-management-system:/app/node_modules
+      - ./prisma:/app/prisma
+    restart: unless-stopped
+    environment:
+      - NODE_PORT=3000
+    expose:
+      - 3000
+    networks:
+      - app-network-management-system
+    depends_on:
+      - postgres_management_system_container
+
+  #NGINX
+
+  nginx_management_system_container:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "${PORT}:80"
+    volumes:
+      - ./public:/var/www/public
+    depends_on:
+      - node_management_system_container
+    networks:
+      - app-network-management-system
+
+  #POSTGRES
+
+  postgres_management_system_container:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "6789:${POSTGRES_PORT}"
+    volumes:
+      - pgdata-management-system:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    networks:
+      app-network-management-system:
+        aliases:
+          - ${POSTGRES_HOST}
+
+#OTHERS
+
+networks:
+  app-network-management-system:
+    driver: bridge
+
+volumes:
+  pgdata-management-system:
+  node-modules-management-system:
