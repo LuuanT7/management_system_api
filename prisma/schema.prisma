@@ -3,15 +3,22 @@ generator client {
 }
 
 // Temporariamente desabilitado para o build do Docker
-// generator erd {
-//   provider = "prisma-erd-generator"
-//   output   = "erd.png"
-//   format   = "png"
-// }
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "erd.png"
+  format   = "png"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+  GUARDIAN
 }
 
 model User {
@@ -22,7 +29,8 @@ model User {
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tokens    Token[]
+
+  tokens Token[]
 
   student  Student?
   teacher  Teacher?
@@ -43,11 +51,12 @@ model Token {
 }
 
 model Guardian {
-  id       String    @id @default(uuid())
-  userId   String    @unique
-  user     User      @relation(fields: [userId], references: [id])
-  students Student[]
-  payments Payment[]
+  id         String       @id @default(uuid())
+  userId     String       @unique
+  user       User         @relation(fields: [userId], references: [id])
+  students   Student[]
+  payments   Payment[]
+  Enrollment Enrollment[]
 }
 
 model Student {
@@ -82,9 +91,11 @@ model Enrollment {
   id         String   @id @default(uuid())
   studentId  String
   classId    String
+  guardianId String
   enrolledAt DateTime @default(now())
   active     Boolean  @default(true)
   student    Student  @relation(fields: [studentId], references: [id])
+  guardian   Guardian @relation(fields: [guardianId], references: [id])
   class      Class    @relation(fields: [classId], references: [id])
 }
 
@@ -106,11 +117,4 @@ model Payment {
   paid       Boolean   @default(false)
   paidAt     DateTime?
   guardian   Guardian  @relation(fields: [guardianId], references: [id])
-}
-
-enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
-  GUARDIAN
 }

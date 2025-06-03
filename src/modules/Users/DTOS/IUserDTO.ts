@@ -1,18 +1,19 @@
-import { Role } from "@prisma/client";
+import { Role, Student } from "@prisma/client";
 
 export interface IUserDTO {
   id: string;
   name: string;
   email: string;
   password: string;
-  role: Role;
+  role: 'ADMIN' | 'GUARDIAN' | 'STUDENT' | 'TEACHER'
 }
 
 export interface ICreateUserDTO {
   name: string;
   email: string;
   password: string;
-  role: Role;
+  role: 'ADMIN' | 'GUARDIAN' | 'STUDENT' | 'TEACHER'
+
 }
 
 export interface IUpdateUserDTO {
@@ -20,5 +21,6 @@ export interface IUpdateUserDTO {
   name?: string;
   email?: string;
   password?: string;
-  role?: Role;
+  role: 'ADMIN' | 'GUARDIAN' | 'STUDENT' | 'TEACHER'
+
 }

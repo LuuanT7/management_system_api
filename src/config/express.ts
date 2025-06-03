@@ -1,6 +1,6 @@
 import { routes } from '@shared/infra/http/routes';
-import "./bootstrap/app";
 import express from 'express';
+import 'dotenv'
 
 export const CreateServer = () => {
   const app = express();

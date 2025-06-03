@@ -9,18 +9,19 @@ export class CreateUserController {
 
 
     try {
+
       const createUserUseCase = container.resolve(CreateUserUseCase);
 
       const hashPassword = await hash(password, 8); // 8 é o número de rounds de hash
 
-      const user = await createUserUseCase.execute({ name, email, password:hashPassword, role });
-  
+      const user = await createUserUseCase.execute({ name, email, password: hashPassword, role });
+
       return response.status(201).json(user);
     } catch (error) {
       console.error(error);
       return response.status(500).json({ message: "Erro ao criar usuário" });
     }
 
-   
+
   }
 }

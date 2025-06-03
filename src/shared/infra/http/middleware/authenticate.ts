@@ -6,7 +6,11 @@ interface ITokenPayload {
   iat: number;
   exp: number;
   sub: string;
+  id: string;
+  name?: string;
+  role?: string;
 }
+
 
 export function authenticate(
   request: Request,
@@ -23,14 +27,16 @@ export function authenticate(
 
   try {
     const decoded = verify(token, process.env.JWT_SECRET as string);
-    const { sub } = decoded as ITokenPayload;
+    const { sub, id, name, role } = decoded as ITokenPayload;
 
     request.user = {
-      id: sub,
+      id: id || sub, // Mantém compatibilidade com tokens antigos
+      name,
+      role,
     };
 
     return next();
-  } catch {
+  } catch (err) {
     throw new AppError('Token JWT inválido', 401);
   }
 }

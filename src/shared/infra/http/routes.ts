@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authRoutes } from '@modules/auth/infra/routes/auth.routes';
-import { userRoutes } from '@modules/users/infra/http/routes/user.routes';
+import { userRoutes } from '@modules/Users/Infra/Http/Routes/user.routes';
 
 
 const routes = Router();
@@ -8,5 +8,5 @@ const routes = Router();
 routes.use('/auth', authRoutes);
 routes.use('/users', userRoutes);
 
-export {routes}
+export { routes }
 
