@@ -9,6 +9,7 @@ interface IResponse {
     id: string;
     name: string;
     email: string;
+    role: string;
   };
   token: string;
   refreshToken: string;
@@ -30,12 +31,24 @@ export class AuthenticateUserUseCase {
       throw new AppError('Email ou senha incorretos', 401);
     }
 
-    const token = sign({}, process.env.JWT_SECRET as string, {
+    // Payload do token com informações do usuário
+    const tokenPayload = {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    };
+
+    const token = sign(tokenPayload, process.env.JWT_SECRET as string, {
       subject: user.id,
       expiresIn: '15m',
     });
 
-    const refreshToken = sign({}, process.env.JWT_REFRESH_SECRET as string, {
+    // Payload do refresh token (pode ser mais simples)
+    const refreshTokenPayload = {
+      id: user.id,
+    };
+
+    const refreshToken = sign(refreshTokenPayload, process.env.JWT_REFRESH_SECRET as string, {
       subject: user.id,
       expiresIn: '7d',
     });
@@ -55,9 +68,10 @@ export class AuthenticateUserUseCase {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
       token,
       refreshToken,
     };
   }
-} 
+}

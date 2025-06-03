@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import 'express-async-errors';
-import "./bootstrap/app";
 import chalk from 'chalk';
 import { CreateServer } from '@config/express';
 
