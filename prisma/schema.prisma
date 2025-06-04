@@ -3,22 +3,54 @@ generator client {
 }
 
 // Temporariamente desabilitado para o build do Docker
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "erd.png"
-  format   = "png"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "erd.png"
+//   format   = "png"
+// }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// Tipos de usuários
 enum Role {
   ADMIN
   TEACHER
   STUDENT
   GUARDIAN
+}
+
+// Tipos de atividades pré-definidos
+enum ActivityType {
+  HOMEWORK // Tarefa de casa
+  TEST // Prova escrita
+  PROJECT // Trabalho prático
+  PRESENTATION // Apresentação oral
+  PARTICIPATION // Participação em aula
+}
+
+// Tipos de notificação
+enum NotificationType {
+  NEW_MATERIAL // Novo material didático disponível
+  GRADE_POSTED // Nova nota lançada
+  GRADE_REVIEW // Média/boletim atualizado
+  ATTENDANCE // Presença registrada
+  PAYMENT_DUE // Pagamento próximo do vencimento
+  PAYMENT_RECEIVED // Pagamento confirmado
+  SYSTEM_ALERT // Alerta do sistema
+  CLASS_UPDATE // Atualização na turma
+}
+
+// Tipos de recursos relacionados
+enum RelatedType {
+  CLASS_MATERIAL // Material didático
+  GRADE // Nota individual
+  GRADE_REPORT // Boletim
+  ATTENDANCE // Registro de presença
+  PAYMENT // Pagamento
+  CLASS // Turma
 }
 
 model User {
@@ -32,9 +64,10 @@ model User {
 
   tokens Token[]
 
-  student  Student?
-  teacher  Teacher?
-  guardian Guardian?
+  student      Student?
+  teacher      Teacher?
+  guardian     Guardian?
+  Notification Notification[]
 }
 
 model Token {
@@ -60,13 +93,14 @@ model Guardian {
 }
 
 model Student {
-  id          String       @id @default(uuid())
-  userId      String       @unique
+  id          String        @id @default(uuid())
+  userId      String        @unique
   guardianId  String
-  user        User         @relation(fields: [userId], references: [id])
-  guardian    Guardian     @relation(fields: [guardianId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+  guardian    Guardian      @relation(fields: [guardianId], references: [id])
   enrollments Enrollment[]
   attendance  Attendance[]
+  GradeReport GradeReport[]
 }
 
 model Teacher {
@@ -77,14 +111,92 @@ model Teacher {
 }
 
 model Class {
-  id          String       @id @default(uuid())
-  name        String
-  subject     String
-  schedule    String
-  teacherId   String
-  teacher     Teacher      @relation(fields: [teacherId], references: [id])
-  enrollments Enrollment[]
-  attendance  Attendance[]
+  id            String          @id @default(uuid())
+  name          String
+  subject       String
+  schedule      String
+  teacherId     String
+  teacher       Teacher         @relation(fields: [teacherId], references: [id])
+  enrollments   Enrollment[]
+  attendance    Attendance[]
+  GradeReport   GradeReport[]
+  Activity      Activity[]
+  ClassMaterial ClassMaterial[]
+}
+
+// Modelo de Boletim Escolar
+model GradeReport {
+  id        String   @id @default(uuid()) // ID único gerado automaticamente
+  studentId String // ID do aluno (relacionamento)
+  classId   String // ID da turma/disciplina
+  period    String // Período letivo (ex: "1º Bimestre")
+  average   Float // Média geral do aluno no período
+  status    String // Situação: Aprovado/Reprovado/Recuperação
+  notes     String? // Observações complementares
+  student   Student  @relation(fields: [studentId], references: [id]) // Relação com Student
+  class     Class    @relation(fields: [classId], references: [id]) // Relação com Class
+  grades    Grade[] // Lista de notas individuais
+  createdAt DateTime @default(now()) // Data de criação do registro
+  updatedAt DateTime @updatedAt // Data da última atualização
+}
+
+// Modelo de Notas Individuais
+model Grade {
+  id            String      @id @default(uuid()) // ID único
+  gradeReportId String // ID do boletim relacionado
+  activityId    String // ID da atividade avaliada
+  value         Float // Valor da nota (0-10)
+  weight        Float       @default(1.0) // Peso na média final
+  comments      String? // Comentários do professor
+  gradeReport   GradeReport @relation(fields: [gradeReportId], references: [id]) // Relação com GradeReport
+  activity      Activity    @relation(fields: [activityId], references: [id]) // Relação com Activity
+  createdAt     DateTime    @default(now()) // Data de criação
+  updatedAt     DateTime    @updatedAt // Data de atualização
+}
+
+// Modelo de Atividades Avaliativas
+model Activity {
+  id          String       @id @default(uuid()) // ID único
+  classId     String // ID da turma/disciplina
+  title       String // Título da atividade
+  description String? // Descrição detalhada
+  type        ActivityType // Tipo: Tarefa/Prova/Projeto/etc.
+  dueDate     DateTime // Data de entrega
+  maxScore    Float        @default(10.0) // Valor máximo da atividade
+  class       Class        @relation(fields: [classId], references: [id]) // Relação com Class
+  grades      Grade[] // Notas atribuídas
+  createdAt   DateTime     @default(now()) // Data de criação
+  updatedAt   DateTime     @updatedAt // Data de atualização
+}
+
+// Modelo de Materiais Didáticos
+model ClassMaterial {
+  id          String   @id @default(uuid()) // ID único
+  classId     String // ID da turma
+  title       String // Título do material
+  description String? // Descrição do conteúdo
+  fileUrl     String? // URL do arquivo (PDF, PPT, etc.)
+  isPublished Boolean  @default(false) // Se está disponível para alunos
+  class       Class    @relation(fields: [classId], references: [id]) // Relação com Class
+  createdAt   DateTime @default(now()) // Data de criação
+  updatedAt   DateTime @updatedAt // Data de atualização
+}
+
+model Notification {
+  id          String           @id @default(uuid()) // ID único da notificação
+  userId      String // ID do usuário destinatário
+  type        NotificationType // Tipo de notificação
+  title       String // Título resumido
+  message     String // Mensagem detalhada
+  relatedId   String? // ID do recurso relacionado (opcional)
+  relatedType RelatedType? // Tipo do recurso relacionado
+  isRead      Boolean          @default(false) // Se foi lida
+  readAt      DateTime? // Data de leitura
+  user        User             @relation(fields: [userId], references: [id]) // Relação com User
+  createdAt   DateTime         @default(now()) // Data de criação
+  updatedAt   DateTime         @updatedAt // Data de atualização
+
+  @@index([userId]) // Índice para buscas por usuário
 }
 
 model Enrollment {
