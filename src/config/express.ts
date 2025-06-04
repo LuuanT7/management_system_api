@@ -1,6 +1,7 @@
 import { routes } from '@shared/infra/http/routes';
 import express from 'express';
 import 'dotenv'
+import '@shared/container'
 
 export const CreateServer = () => {
   const app = express();
