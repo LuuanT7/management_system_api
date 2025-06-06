@@ -1,4 +1,4 @@
-import { prisma } from "../../../shared/infra/prisma/client";
+import { prisma } from "../../../../shared/infra/prisma/client";
 import { IClassDTO } from "../../dtos/IClassDTO";
 import { IClassRepository } from "../IClassRepository";
 
