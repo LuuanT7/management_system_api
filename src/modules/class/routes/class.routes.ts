@@ -1,9 +1,12 @@
-import { Router } from 'express';
-import { CreateClassController } from '../../modules/class/controllers/CreateClassController';
-const classRoutes = Router();
+import { Request, Response } from 'express';
 
-const createClassController = new CreateClassController();
+export class ClassController {
+  handle(req: Request, res: Response): Response {
+    const { name, description } = req.body;
 
-classRoutes.post('/', (req, res) => createClassController.handle(req, res));
+    // Simulação de lógica de criação
+    const newClass = { id: Date.now(), name, description };
 
-export { classRoutes };
+    return res.status(201).json({ message: 'Classe criada', class: newClass });
+  }
+}
