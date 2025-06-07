@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { verify } from 'jsonwebtoken';
 import { AppError } from '../../../../shared/errors/AppError';
+import chalk from 'chalk';
 
 interface ITokenPayload {
   iat: number;
@@ -34,9 +35,11 @@ export function authenticate(
       name,
       role,
     };
+    console.log("USER AUTHENTICATED", chalk.green(request.user))
 
     return next();
   } catch (err) {
+    console.log("ERROR", chalk.red(err))
     throw new AppError('Token JWT inválido', 401);
   }
 }

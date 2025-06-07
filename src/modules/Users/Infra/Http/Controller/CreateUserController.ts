@@ -16,6 +16,9 @@ export class CreateUserController {
 
       const user = await createUserUseCase.execute({ name, email, password: hashPassword, role });
 
+
+
+
       return response.status(201).json(user);
     } catch (error) {
       console.error(error);
