@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authRoutes } from '@modules/auth/infra/routes/auth.routes';
+import { authRoutes } from '@modules/auth/infra/http/routes/auth.routes';
 import { userRoutes } from '@modules/Users/Infra/Http/Routes/user.routes';
 
 
