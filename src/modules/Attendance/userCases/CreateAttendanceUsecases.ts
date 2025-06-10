@@ -1,16 +1,26 @@
 import { IAttendanceRepository } from "../repositories/IAttendanceRepository";
 import { IAttendanceDTO } from "../dtos/IAttendenceDTO";
 
-export class CreateAttendanceUseCase {
+export class CreateAttendanceUsecase {
   constructor(private attendanceRepository: IAttendanceRepository) {}
 
-  async execute(data: IAttendanceDTO): Promise<void> {
-    const existing = await this.attendanceRepository.findByStudentAndDate(data.studentId, data.date);
+  async execute(data: { studentId?: string; classId?: string; date?: string; status?: 'PRESENT' | 'ABSENT' | 'LATE' }) {
+    const { studentId, classId, date, status } = data;
 
-    if (existing) {
-      throw new Error("Attendance already registered for this student on this date.");
+    if (!studentId || !classId) {
+      throw new Error("studentId e classId são obrigatórios.");
     }
 
-    await this.attendanceRepository.create(data);
+    // Define a presença com base no status
+    const present = status === "PRESENT";
+
+    const attendanceData: IAttendanceDTO = {
+      studentId,
+      classId,
+      date: date ? new Date(date) : new Date(),
+      present,
+    };
+
+    await this.attendanceRepository.create(attendanceData);
   }
 }
