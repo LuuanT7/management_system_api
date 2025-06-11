@@ -1,6 +1,5 @@
-🧠 Trabalhos finais Desenvolvimento Web
-
-Uma API REST simples para cadastro, listagem e busca de colaboradores, utilizando Node.js, PostgreSQL e Nginx com Docker.
+🎓 Sistema de Gerenciamento Escolar
+Uma API REST para gerenciamento completo de usuários, matrícula, presenças, avaliações, boletins, materiais de aula, notificações e pagamentos. Desenvolvida com Node.js, PostgreSQL, Docker e Nginx.
 
 🚀 Stack utilizada
 Node.js (Express)
@@ -12,19 +11,19 @@ Nginx (como reverse proxy)
 Docker e Docker Compose
 
 📦 Subindo o projeto
-Pré-requisitos
+✅ Pré-requisitos
 Docker
 
 Docker Compose
 
-Passo a passo
-Clone este repositório:
+▶️ Passo a passo
+Clone o repositório:
 
 bash
 Copiar
 Editar
-git clone https://github.com/LuuanT7/tf_dev_web.git
-cd tf_collaborators
+git clone https://github.com/seu-usuario/seu-repo-escolar.git
+cd seu-repo-escolar
 Copie o arquivo .env.exemplo:
 
 bash
@@ -41,166 +40,80 @@ Acesse a aplicação:
 
 API: http://localhost:8080/api
 
-📌 Rotas da API
-➕ Criar colaborador
-POST /api/collaborators/create
+📌 Endpoints principais da API
+👤 Usuários
+➕ Criar usuário
+POST /api/users/create
+(define tipo de usuário: guardian, teacher ou student)
 
-Body JSON:
+🔁 Relacionar usuário com perfil (pivot)
+POST /api/users/assign-role
 
-json
-Copiar
-Editar
-{
-"name": "João Silva",
-"role": "Desenvolvedor",
-"can_develop": true
-}
-📋 Listar colaboradores
-GET /api/collaborators/list
+📝 Matrículas (Enrollment)
+➕ Matricular aluno
+POST /api/enrollment/create
 
-Parâmetros opcionais via query:
+📆 Presença (Attendance)
+📌 Marcar presença
+POST /api/attendance/mark
 
-limit: número de registros (padrão: 10)
+📋 Listar presenças por aluno ou data
+GET /api/attendance/list
 
-offset: deslocamento (padrão: 0)
+🏫 Classe (Class)
+➕ Criar classe
+POST /api/class/create
 
-field: campo para ordenação (ex: name, role)
+📋 Listar classes
+GET /api/class/list
 
-direction: ASC ou DESC
+📊 Boletim (GradeReport)
+➕ Criar boletim do aluno
+POST /api/grade-report/create
 
-Exemplo:
+📋 Consultar boletim por aluno
+GET /api/grade-report/:studentId
 
-bash
-Copiar
-Editar
-http://localhost:8080/api/collaborators/list?limit=5&field=name&direction=ASC
-🔍 Buscar colaborador por ID
-GET /api/collaborators/:id
+🧮 Notas (Grade)
+➕ Registrar nota
+POST /api/grade/create
 
-👥 Clientes
-📌 Novo módulo com 5 endpoints
-➕ Criar cliente
-POST /api/clients/create
+📝 Atividades (Activity)
+➕ Criar avaliação
+POST /api/activity/create
 
-Body JSON:
+📚 Materiais de Aula (ClassMaterial)
+➕ Adicionar material
+POST /api/materials/upload
 
-json
-Copiar
-Editar
-{
-  "name": "Maria Oliveira",
-  "birth_date": "1990-05-20",
-  "rg": "12345678",
-  "cpf": "123.456.789-00",
-  "phone": "(11) 99999-8888",
-  "address": "Rua das Flores",
-  "number_house": "100",
-  "city": "São Paulo",
-  "uf": "SP",
-  "cep": "01010-000"
-}
-Exemplo:
+🔔 Notificações
+➕ Criar notificação
+POST /api/notifications/send
 
-bash
-Copiar
-Editar
-curl -X POST http://localhost:8080/api/clients/create \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Maria Oliveira","birth_date":"1990-05-20","rg":"12345678","cpf":"123.456.789-00","phone":"(11) 99999-8888","address":"Rua das Flores","number_house":"100","city":"São Paulo","uf":"SP","cep":"01010-000"}'
-  
-🖊️ Editar cliente
-PUT /api/clients/update/:code
+Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outros.
 
-Exemplo:
+💰 Pagamentos (Payment)
+➕ Registrar pagamento
+POST /api/payment/create
 
-bash
-Copiar
-Editar
-curl -X PUT http://localhost:8080/api/clients/update/1 \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Maria O. Silva","phone":"(11) 98888-7777"}'
-  
-📋 Listar clientes
-GET /api/clients/list
+📋 Histórico de pagamentos
+GET /api/payment/list/:studentId
 
-Você pode usar qualquer um dos seguintes parâmetros via query para filtrar os resultados:
-
-code: código do cliente
-
-name: nome
-
-birth_date: data de nascimento (formato: YYYY-MM-DD)
-
-rg: número do RG
-
-cpf: número do CPF
-
-phone: telefone
-
-address: endereço
-
-number_house: número da residência
-
-city: cidade
-
-uf: estado (UF)
-
-cep: CEP
-
-Também é possível usar os parâmetros de paginação e ordenação:
-
-limit: número de registros por página (padrão: 10)
-
-offset: deslocamento (padrão: 0)
-
-field: campo para ordenação (ex: name, city, code)
-
-direction: ASC ou DESC
-
-Exemplo:
-
-bash
-Copiar
-Editar
-curl "http://localhost:8080/api/clients/list?city=São Paulo&uf=SP&limit=5&field=name&direction=ASC"
-
-GET /api/clients/get/:code
-
-Exemplo:
-
-bash
-Copiar
-Editar
-curl http://localhost:8080/api/clients/get/1
-
-❌ Deletar cliente
-DELETE /api/clients/delete/:code
-
-Exemplo:
-
-bash
-Copiar
-Editar
-curl -X DELETE http://localhost:8080/api/clients/delete/1
+🔎 Teste a API no Postman
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/team-monkey/workspace/management-system/collection/29388628-f8ced165-b863-41da-97b2-047c3e0c26b4?action=share&creator=29388628 )
 
 
-## Teste a API no Postman
-
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/interstellar-desert-954549/workspace/unifaat)
 
 🐘 Banco de Dados
-As credenciais e configurações do banco de dados são definidas no arquivo .env, com base no .env.exemplo.
-
-Exemplo de variáveis:
+As credenciais estão no arquivo .env. Exemplo:
 
 env
 Copiar
 Editar
-POSTGRES_HOST=postgres_aula_11_container
+POSTGRES_HOST=postgres_container
 POSTGRES_PORT=5432
-POSTGRES_USER=meu_usuario
-POSTGRES_PASSWORD=minha_senha
-POSTGRES_DB=collaborators
-
+POSTGRES_USER=usuario
+POSTGRES_PASSWORD=senha
+POSTGRES_DB=school_db
 🌐 Configuração Nginx
-O Nginx escuta na porta 8080 e redireciona as requisições para o servidor Node.js na porta 3000.
+O Nginx escuta na porta 8080 e redireciona para o servidor Node.js na porta 3000.
