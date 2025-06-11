@@ -24,33 +24,15 @@ Docker Compose
 
 Clone o repositório:
 
-bash
-
-Copiar
-
-Editar
-
 git clone https://github.com/LuuanT7/management_system_api.git
 
 cd management_system_api
 
 Copie o arquivo .env.exemplo:
 
-bash
-
-Copiar
-
-Editar
-
 cp .env.exemplo .env
 
 Suba os containers:
-
-bash
-
-Copiar
-
-Editar
 
 docker-compose up --build
 
