@@ -130,12 +130,6 @@ Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outro
 
 As credenciais estão no arquivo .env. Exemplo:
 
-env
-
-Copiar
-
-Editar
-
 POSTGRES_HOST=postgres_container
 
 POSTGRES_PORT=5432
