@@ -30,7 +30,7 @@ Copiar
 
 Editar
 
-git clone [https://github.com/seu-usuario/seu-repo-escolar.git](https://github.com/LuuanT7/management_system_api.git)
+git clone https://github.com/LuuanT7/management_system_api.git
 
 cd seu-repo-escolar
 
