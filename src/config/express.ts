@@ -2,6 +2,8 @@ import { routes } from '@shared/infra/http/routes';
 import express from 'express';
 import 'dotenv'
 import '@shared/container'
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from '@shared/documents/swagger.json';
 
 export const CreateServer = () => {
   const app = express();
@@ -10,6 +12,10 @@ export const CreateServer = () => {
 
   // Inicializar rotas
   app.use("/v1", routes);
+
+  //Inicializar rota do swagger
+  app.use('/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
 
   // Middleware para tratar rotas não encontradas (404)
   app.use((req, res) => {

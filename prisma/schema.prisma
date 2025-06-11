@@ -8,7 +8,7 @@ generator client {
  // output    = "erd.svg"
  // format    = "svg"
  // puppeteer = true
-// }
+
 
 datasource db {
   provider = "postgresql"
@@ -55,20 +55,42 @@ enum RelatedType {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
-  role      Role     @default(STUDENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  phone     String?
+  cpf       String?   @unique
+  rg        String?
+  gender    String?
+  birthDate DateTime?
+  role      Role      @default(STUDENT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  tokens Token[]
-
+  tokens       Token[]
   student      Student?
   teacher      Teacher?
   guardian     Guardian?
   Notification Notification[]
+  UserAddress  UserAddress[]
+}
+
+model UserAddress {
+  id           String   @id @default(uuid())
+  userId       String
+  address      String
+  city         String
+  state        String
+  number       String
+  zipCode      String
+  complement   String?
+  neighborhood String?
+  user         User     @relation(fields: [userId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model Token {
@@ -111,11 +133,16 @@ model Teacher {
   classes Class[]
 }
 
+enum Shift {
+  MORNING
+  AFTERNOON
+}
+
 model Class {
   id            String          @id @default(uuid())
   name          String
   subject       String
-  schedule      String
+  shift         Shift           @default(MORNING)
   teacherId     String
   teacher       Teacher         @relation(fields: [teacherId], references: [id])
   enrollments   Enrollment[]
@@ -200,16 +227,25 @@ model Notification {
   @@index([userId]) // Índice para buscas por usuário
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
 model Enrollment {
-  id         String   @id @default(uuid())
-  studentId  String
-  classId    String
-  guardianId String
-  enrolledAt DateTime @default(now())
-  active     Boolean  @default(true)
-  student    Student  @relation(fields: [studentId], references: [id])
-  guardian   Guardian @relation(fields: [guardianId], references: [id])
-  class      Class    @relation(fields: [classId], references: [id])
+  id            String        @id @default(uuid())
+  studentId     String
+  classId       String
+  guardianId    String
+  paymentStatus PaymentStatus @default(PENDING)
+  enrolledAt    DateTime      @default(now())
+  paymentId     String?
+  active        Boolean       @default(true)
+  student       Student       @relation(fields: [studentId], references: [id])
+  guardian      Guardian      @relation(fields: [guardianId], references: [id])
+  class         Class         @relation(fields: [classId], references: [id])
+  payment       Payment?      @relation(fields: [paymentId], references: [id])
 }
 
 model Attendance {
@@ -223,11 +259,12 @@ model Attendance {
 }
 
 model Payment {
-  id         String    @id @default(uuid())
+  id         String       @id @default(uuid())
   guardianId String
   amount     Float
   dueDate    DateTime
-  paid       Boolean   @default(false)
+  paid       Boolean      @default(false)
   paidAt     DateTime?
-  guardian   Guardian  @relation(fields: [guardianId], references: [id])
+  guardian   Guardian     @relation(fields: [guardianId], references: [id])
+  Enrollment Enrollment[]
 }

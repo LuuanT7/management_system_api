@@ -5,12 +5,12 @@ import { UpdateUserUseCase } from "@modules/Users/UseCases/UpdateUserUseCase";
 export class UpdateUserController {
   async handle(request: Request, response: Response) {
     const { id } = request.params;
-    const { name, email, password, role } = request.body;
+    const { name, email, password, role, cpf, rg, gender, phone, birthDate } = request.body;
 
     try {
       const updateUserUseCase = container.resolve(UpdateUserUseCase);
 
-      const user = await updateUserUseCase.execute({ id, name, email, password, role });
+      const user = await updateUserUseCase.execute({ id, name, email, password, role, cpf, rg, gender, phone, birthDate });
 
       return response.status(200).json(user);
     } catch (error) {

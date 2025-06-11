@@ -1,4 +1,4 @@
-import { IUserRepository } from "@modules/Users/Repositories/IUserRepository";
+import { IUserRepository } from "@modules/Users/repositories/IUserRepository";
 import { inject, injectable } from "tsyringe";
 import { z } from "zod";
 
@@ -19,7 +19,7 @@ export class FindByIdUserUseCase {
 
     const { id: validatedId } = findByIdSchema.parse({ id });
     try {
-      
+
 
       const user = await this.userRepository.findById(validatedId);
 

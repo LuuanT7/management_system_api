@@ -1,4 +1,4 @@
-import { IUserRepository } from "@modules/Users/Repositories/IUserRepository";
+import { IUserRepository } from "@modules/Users/repositories/IUserRepository";
 import { inject, injectable } from "tsyringe";
 import { ICreateUserDTO } from "../DTOS/IUserDTO";
 import { z } from "zod";
@@ -29,7 +29,6 @@ const createUserSchema = z.object({
 @injectable()
 //classe construtura, estudar classe contrutoria e injeção de dependencia
 // estudar classe e arquitetura solids
-
 export class CreateUserUseCase {
   constructor(
     @inject("UserRepository")
@@ -43,7 +42,17 @@ export class CreateUserUseCase {
       const { name, email, password, role } = createUserSchema.parse(data);
 
       //passando os dados validados para a função de criar
-      const user = await this.userRepository.create({ name, email, password, role });
+      const user = await this.userRepository.create({
+        name,
+        email,
+        password,
+        role,
+        cpf: data.cpf,
+        rg: data.rg,
+        gender: data.gender,
+        phone: data.phone,
+        birthDate: data.birthDate
+      });
 
       return user;
 

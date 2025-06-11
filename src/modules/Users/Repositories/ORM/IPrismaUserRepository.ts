@@ -14,25 +14,52 @@ export class IPrismaUserRepository implements IUserRepository {
     const user = await prisma.user.findUnique({ where: { id } })
     return user
   }
-  async create({ email, name, password, role }: ICreateUserDTO): Promise<ICreateUserDTO> {
+  async create({ email,
+    name,
+    password,
+    role,
+    cpf,
+    rg,
+    gender,
+    phone,
+    birthDate }: ICreateUserDTO): Promise<ICreateUserDTO> {
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password,
-        role
+        role,
+        cpf,
+        rg,
+        gender,
+        phone,
+        birthDate
       }
     })
     return user
   }
-  async update({ id, name, email, password, role }: IUpdateUserDTO): Promise<IUserDTO> {
+  async update({ id,
+    name,
+    email,
+    password,
+    role,
+    cpf,
+    rg,
+    gender,
+    phone,
+    birthDate }: IUpdateUserDTO): Promise<IUserDTO> {
     const user = await prisma.user.update({
       where: { id },
       data: {
         name,
         email,
         password,
-        role
+        role,
+        cpf,
+        rg,
+        gender,
+        phone,
+        birthDate
       }
     })
     return user
@@ -44,3 +71,4 @@ export class IPrismaUserRepository implements IUserRepository {
     return id
   }
 }
+
