@@ -41,63 +41,84 @@ Acesse a aplicação:
 API: http://localhost:8080/api
 
 📌 Endpoints principais da API
+
 👤 Usuários
+
 ➕ Criar usuário
+
 POST /api/users/create
 (define tipo de usuário: guardian, teacher ou student)
 
-🔁 Relacionar usuário com perfil (pivot)
-POST /api/users/assign-role
-
 📝 Matrículas (Enrollment)
+
 ➕ Matricular aluno
+
 POST /api/enrollment/create
 
 📆 Presença (Attendance)
+
 📌 Marcar presença
-POST /api/attendance/mark
+
+#Em desenvolvimento...
 
 📋 Listar presenças por aluno ou data
-GET /api/attendance/list
+
+#Em desenvolvimento...
 
 🏫 Classe (Class)
+
 ➕ Criar classe
-POST /api/class/create
+
+#Em desenvolvimento...
 
 📋 Listar classes
-GET /api/class/list
+
+#Em desenvolvimento...
 
 📊 Boletim (GradeReport)
+
 ➕ Criar boletim do aluno
-POST /api/grade-report/create
+
+#Em desenvolvimento...
 
 📋 Consultar boletim por aluno
-GET /api/grade-report/:studentId
+
+#Em desenvolvimento...
 
 🧮 Notas (Grade)
+
 ➕ Registrar nota
-POST /api/grade/create
+
+#Em desenvolvimento...
 
 📝 Atividades (Activity)
+
 ➕ Criar avaliação
-POST /api/activity/create
+
+#Em desenvolvimento...
 
 📚 Materiais de Aula (ClassMaterial)
+
 ➕ Adicionar material
-POST /api/materials/upload
+
+#Em desenvolvimento...
 
 🔔 Notificações
+
 ➕ Criar notificação
-POST /api/notifications/send
+
+#Em desenvolvimento...
 
 Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outros.
 
 💰 Pagamentos (Payment)
+
 ➕ Registrar pagamento
-POST /api/payment/create
+#Em desenvolvimento...
 
 📋 Histórico de pagamentos
-GET /api/payment/list/:studentId
+
+#Em desenvolvimento...
 
 🔎 Teste a API no Postman
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/team-monkey/workspace/management-system/collection/29388628-f8ced165-b863-41da-97b2-047c3e0c26b4?action=share&creator=29388628 )
