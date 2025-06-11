@@ -32,7 +32,7 @@ Editar
 
 git clone https://github.com/LuuanT7/management_system_api.git
 
-cd seu-repo-escolar
+cd management_system_api
 
 Copie o arquivo .env.exemplo:
 
