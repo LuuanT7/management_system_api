@@ -4,11 +4,11 @@ generator client {
 
 // Temporariamente desabilitado para o build do Docker
 // generator erd {
-//   provider  = "prisma-erd-generator"
-//   output    = "erd.png"
-//   format    = "png"
-//   puppeteer = true
-// }
+ // provider  = "prisma-erd-generator"
+ // output    = "erd.svg"
+ // format    = "svg"
+ // puppeteer = true
+
 
 datasource db {
   provider = "postgresql"
