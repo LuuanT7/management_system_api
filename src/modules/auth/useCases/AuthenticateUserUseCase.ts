@@ -21,6 +21,8 @@ export class AuthenticateUserUseCase {
       where: { email },
     });
 
+    console.log("TESTE", email, password)
+
     if (!user) {
       throw new AppError('Email ou senha incorretos', 401);
     }
@@ -41,7 +43,7 @@ export class AuthenticateUserUseCase {
 
     const token = sign(tokenPayload, process.env.JWT_SECRET as string, {
       subject: user.id,
-      expiresIn: '15m',
+      expiresIn: '1d',
     });
 
     // Payload do refresh token (pode ser mais simples)
@@ -51,7 +53,7 @@ export class AuthenticateUserUseCase {
 
     const refreshToken = sign(refreshTokenPayload, process.env.JWT_REFRESH_SECRET as string, {
       subject: user.id,
-      expiresIn: '7d',
+      expiresIn: '1d',
     });
 
     // Salvar o refresh token no banco
