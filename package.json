@@ -32,7 +32,7 @@
     "nodemailer": "^7.0.3",
     "npm": "^11.4.1",
     "reflect-metadata": "^0.2.2",
-    "swagger": "^0.7.5",
+    "swagger": "^0.0.1",
     "swagger-ui-express": "^5.0.1",
     "tsconfig-paths": "^4.2.0",
     "tsyringe": "^4.10.0",

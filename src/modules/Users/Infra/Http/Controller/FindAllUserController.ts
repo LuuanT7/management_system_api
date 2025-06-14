@@ -6,8 +6,8 @@ export class FindAllUserController {
   async handle(request: Request, response: Response) {
     try {
       const findAllUserUseCase = container.resolve(FindAllUserUseCase);
-  
-      const users = await findAllUserUseCase.execute();
+      const { page, limit, search } = request.query;
+      const users = await findAllUserUseCase.execute({ page: Number(page), limit: Number(limit), search: search as string });
   
       return response.status(200).json(users);
       

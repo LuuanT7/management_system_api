@@ -35,7 +35,7 @@ export function authenticate(
       name,
       role,
     };
-    console.log("USER AUTHENTICATED", chalk.green(request.user))
+    console.log("USER AUTHENTICATED", chalk.green(JSON.stringify(request.user)))
 
     return next();
   } catch (err) {
