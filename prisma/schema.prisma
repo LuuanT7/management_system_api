@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:postgres@db:5432/project-management?schema=public"
+}
+
+enum Shift {
+  MORNING
+  AFTERNOON
+}
+
+model Teacher {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  classes  Class[]
+}
+
+model Class {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now())
+  subject     String
+  shift       Shift
+  startTime   String
+  endTime     String
+  teacherId   String
+  teacher     Teacher  @relation(fields: [teacherId], references: [id])
+}
+
+
