@@ -1,55 +1,113 @@
-*** Estrura do projeto 
-projeto_faculdade/
-├── node_modules/
-├── src/
-│   ├── app.ts
-│   ├── shared/
-│   │   ├── container/
-│   │   │   └── index.ts
-│   │   └── infra/
-│   │       └── prisma/
-│   │           └── client.ts
-│   ├── modules/
-│   │   └── class/
-│   │       ├── controllers/
-│   │       │   └── ClassController.ts
-│   │       ├── dtos/
-│   │       │   ├── IClassDTO.ts
-│   │       │   └── IListClassesDTO.ts
-│   │       ├── repositories/
-│   │       │   ├── IClassRepository.ts
-│   │       │   └── implementations/
-│   │       │       └── PrismaClassRepository.ts
-│   │       ├── routes/
-│   │       │   └── class.routes.ts
-│   │       ├── services/
-│   │       │   └── ListClassesService.ts
-│   │       └── useCases/
-│   │           ├── CreateClassUseCase.ts
-│   │           └── ListClassesUseCase.ts
-├── .gitignore
+# 📚 Management System API
+
+API para gerenciamento de alunos, professores, turmas e disciplinas de uma instituição de ensino. Projeto acadêmico desenvolvido com Node.js, TypeScript, Prisma e Docker.
+
+---
+
+## 🚀 Tecnologias Utilizadas
+
+- **Node.js** com **Express**
+- **TypeScript**
+- **Prisma ORM**
+- **PostgreSQL**
+- **Docker & Docker Compose**
+- **CLI Table 3** (listagens formatadas no terminal)
+- **JWT** para autenticação
+
+---
+
+## 📦 Instalação Local
+
+### Pré-requisitos
+
+- Node.js ≥ 18.x
+- Docker e Docker Compose (opcional)
+- PostgreSQL (se for rodar sem Docker)
+
+### 1. Clonar o projeto
+
+```bash
+git clone https://github.com/LuuanT7/management_system_api.git
+cd management_system_api
+git checkout feat_endpoints
+
+### Instalar dependências:
+** npm install
+
+### Configurar o banco de dados:
+Edite o arquivo .env com os dados do PostgreSQL:
+** DATABASE_URL="postgresql://    postgres:postgres@localhost:5432management"
+JWT_SECRET="suachavesecreta"
+**
+
+### Rodar as migrations e seed (opcional):
+** npx prisma migrate dev
+
+### Executando com Docker:
+** docker-compose up -d
+
+### Acessar o container e aplicar migrations:
+** docker exec -it api bash
+** npx prisma migrate dev
+
+
+### 📂 Organização do Projeto:
+
+management_system_api/
+│
+├── modules/
+│   ├── class/
+│   ├── student/
+│   ├── teacher/
+│   └── subject/
+│
+├── shared/
+│   ├── container/       # Injeção de dependências
+│   ├── infra/           # Conexão Prisma
+│
+├── prisma/
+│   └── schema.prisma    # Modelos do banco
+│
+├── docker-compose.yml
+├── dockerfile
+├── tsconfig.json
 ├── package.json
-├── package-lock.json
-└── tsconfig.json
-***
+└── .env.example
 
 
-***
-📂 Como os módulos interagem
-DTO (IClassDTO.ts): Interface para os dados que vão entrar na criação de uma turma.
+### 📌 Endpoints Disponíveis:
 
-UseCase (CreateClassUseCase.ts): Contém a regra de validação do horário conforme o turno.
+## 🔐 Autenticação:
+** Autenticação de usuário com JWT.
 
-Repository (IClassRepository.ts): Interface com métodos como create, findByFilters, etc.
+## 👨‍🎓 Alunos:
+** GET /api/alunos
+Lista todos os alunos com paginação.
 
-Controller (ClassController.ts): Recebe a requisição e passa os dados para o use case.
+## 👨‍🏫 Professores:
+** GET /api/teachers
+Lista professores.
 
-Service (ListClassesService.ts): Contém a lógica de listagem com filtros por professor, turno e disciplina.
+## 📚 Disciplinas:
+** GET /api/subjects
+Lista disciplinas.
 
-Rota (class.routes.ts): Define endpoints como:
+## 🏫 Turmas:
+Lista turmas (com filtros por turno, professor e disciplina).
 
 POST /classes
+Cria uma nova turma e associa automaticamente um professor.
 
-GET /classes?turno=MORNING&disciplina=Math
 
-***
+### 💻 Scripts Disponíveis:
+** npm run dev         # Inicia servidor com nodemon
+   npx prisma studio   # Interface gráfica para visualizar dados
+   npx prisma migrate dev  # Executa migrations
+
+###🧪 Testes
+Ainda não implementado.
+
+
+
+
+
