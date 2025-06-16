@@ -30,5 +30,28 @@ model Class {
   teacherId   String
   teacher     Teacher  @relation(fields: [teacherId], references: [id])
 }
+model Activity {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   // opcional, pois não está usado no create, mas pode ser útil
+  dueDate     DateTime
+  maxScore    Float
+  weight      Float?    @default(1)
+  type        ActivityType
+  teacherId   String
+  classId     String
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum ActivityType {
+  HOMEWORK
+  TEST
+  PROJECT
+  QUIZ
+  EXAM
+}
+
 
 

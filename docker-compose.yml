@@ -5,25 +5,25 @@ services:
       - "3000:3000"
     depends_on:
       db:
-        condition: service_healthy  # Espera até o Postgres estar pronto
+        condition: service_healthy
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
     volumes:
-      - ./:/app 
-      - /app/node_modules  # Evita sobreposição
-    restart: unless-stopped  # Reinicia automaticamente em falhas
+      - ./:/app
+      - /app/node_modules  # Isso protege o node_modules do container
+    restart: unless-stopped
 
   db:
     image: postgres:15-alpine
     ports:
-      - "5433:5432"  # Porta 5433 no host → 5432 no container
+      - "5433:5432"
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres  # Adicione um banco padrão
+      POSTGRES_DB: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck:  # Verifica se o Postgres está pronto
+    healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
