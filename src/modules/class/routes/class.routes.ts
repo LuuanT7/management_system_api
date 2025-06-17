@@ -1,11 +1,16 @@
-import { Request, Response } from 'express';
+import { Router } from "express";
+import { ClassController } from "../controllers/ClassController";
 
-export class ClassController {
-  handle(req: Request, res: Response): Response {
-    const { name, description } = req.body;
+const classRoutes = Router();
+const classController = new ClassController();
 
-    const newClass = { id: Date.now(), name, description };
-
-    return res.status(201).json({ message: 'Classe criada', class: newClass });
+// Com async/await explícito
+classRoutes.get("/", async (req, res, next) => {
+  try {
+    await classController.list(req, res);
+  } catch (error) {
+    next(error);
   }
-}
+});
+
+export { classRoutes };

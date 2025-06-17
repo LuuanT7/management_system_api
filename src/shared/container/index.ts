@@ -1,13 +1,8 @@
-import { container } from "tsyringe";
-import { IClassRepository } from "../../modules/class/repositories/IClassRepository";
-import { PrismaClassRepository } from "../../modules/class/repositories/implementations/PrismaClassRepository";
-import { CreateClassUseCase } from "../../modules/class/useCases/CreateClassUseCase";
-
+import { container } from 'tsyringe';
+import 'reflect-metadata';
+import { IClassRepository } from '../../modules/class/repositories/IClassRepository';
+import { PrismaClassRepository } from '../../../src/modules/class/repositories/implementations/PrismaClassRepository';
 container.registerSingleton<IClassRepository>(
-  "ClassRepository",
+  'ClassRepository',
   PrismaClassRepository
-);
-
-container.registerSingleton<CreateClassUseCase>(
-  CreateClassUseCase
 );

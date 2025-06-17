@@ -3,4 +3,9 @@ export interface IClassDTO {
   name: string;
   description?: string;
   createdAt?: Date;
+  subject: string; // nome da disciplina/matéria
+  shift: 'MORNING' | 'AFTERNOON';  // turno
+  startTime: string;
+  endTime: string;
+  teacherId: string; // id do professor responsável
 }

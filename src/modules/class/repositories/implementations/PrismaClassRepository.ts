@@ -1,17 +1,38 @@
-import { prisma } from "../../../../shared/infra/prisma/client";
-import { IClassDTO } from "../../dtos/IClassDTO";
-import { IClassRepository } from "../IClassRepository";
+import { Class } from '@prisma/client';
+import { IClassRepository } from '../IClassRepository';
+import { prisma } from '../../../../shared/infra/prisma/client';
+import { IListClassesDTO } from '../../dtos/IListClassesDTO';
+import { IClassDTO } from '../../dtos/IClassDTO';
 
-export class PrismaClassRepository implements IClassRepository {
-  async create(data: IClassDTO): Promise<IClassDTO> {
-    return await prisma.class.create({ data });
+class PrismaClassRepository implements IClassRepository {
+  async create(data: IClassDTO): Promise<Class> {
+    const newClass = await prisma.class.create({
+      data,
+    });
+    return newClass;
   }
 
-  async findById(id: string): Promise<IClassDTO | null> {
-    return await prisma.class.findUnique({ where: { id } });
+  async listClasses({ teacherId, shift, subject }: IListClassesDTO): Promise<Class[]> {
+    return prisma.class.findMany({
+      where: {
+        teacherId: teacherId ? teacherId : undefined,
+        shift: shift ? shift : undefined,
+        subject: subject 
+          ? { contains: subject, mode: 'insensitive' }
+          : undefined,
+      },
+      include: {
+        teacher: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
   }
+} 
 
-  async findAll(): Promise<IClassDTO[]> {
-    return await prisma.class.findMany();
-  }
-}
+export { PrismaClassRepository };
