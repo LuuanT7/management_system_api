@@ -1,24 +1,39 @@
 import { IAttendanceRepository } from "../repositories/IAttendanceRepository";
+import { AppError } from "@shared/errors/AppError";
+import { inject, injectable } from "tsyringe";
+import { z } from "zod";
+import { IAttendanceDTO } from "../dtos/IAttendenceDTO";
 
-interface IRequest {
-  studentId: string;
-  classId: string;
-}
+const findByIdSchema = z.object({
+    id: z.string({
+        required_error: "ID da matrícula é obrigatório",
+        invalid_type_error: "ID da matrícula deve ser uma string"
+    }).uuid("ID da matrícula inválido")
+});
 
-export class FindByStudentAndClassUsecase {
-  constructor(private attendanceRepository: IAttendanceRepository) {}
+@injectable()
+export class FindByIdAttendanceUseCase {
+    constructor(
+        @inject("IAttendanceRepository")
+        private AttendanceRepository: IAttendanceRepository
+    ) { }
 
-  async execute({ studentId, classId }: IRequest) {
-    if (!studentId || !classId) {
-      throw new Error("studentId e classId são obrigatórios");
+    async execute(id: string): Promise<IAttendanceDTO> {
+        try {
+            const { id: validatedId } = findByIdSchema.parse({ id });
+            const attendance = await this.AttendanceRepository.findById(validatedId);
+
+            if (!attendance) {
+                throw new AppError("Matrícula não encontrada", 404);
+            }
+
+            return attendance;
+        } catch (error) {
+            console.error(error);
+            if (error instanceof AppError) {
+                throw error;
+            }
+            throw new AppError("Erro ao buscar matrícula por ID (FindByIdEnrollmentUseCase)", 500);
+        }
     }
-
-    const attendance = await this.attendanceRepository.findByStudentAndClass(studentId, classId);
-
-    if (!attendance) {
-      throw new Error("Presença não encontrada para esse aluno e turma");
-    }
-
-    return attendance;
-  }
-}
+} 

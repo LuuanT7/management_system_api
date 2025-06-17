@@ -1,16 +1,15 @@
 import { Router } from "express";
-import { CreateAttendanceUsecase } from "../../../userCases/CreateAttendanceUsecases";
-import { FindAllAttendanceUsecase } from "../../../userCases/FindAllAttendanceUsecase";
-import { FindAttendanceByIdUsecase } from "../../../userCases/FindAttendanceByIdUsecase";
-import { UpdateAttendanceUsecase } from "../../../userCases/UpdateAttendanceUsecase";
-import { DeleteAttendanceUsecase } from "../../../userCases/DeleteAttendanceUsecase";
-import { createAttendanceController, deleteAttendanceController, findAttendanceByIdController, updateAttendanceController } from "../controllers/AttendaceController";
+
+import { createAttendanceController } from "../controllers/AttendaceCont";
+import { findAttendanceByIdController } from "../controllers/AttendanceController";
+import { updateAttendanceController } from "../controllers/AttendanceController";
+import { deleteAttendanceController } from "../controllers/AttendanceController";
 import { findByStudentAndClassController } from "../controllers/FindByStudentAndClassController";
 
 const attendanceRoutes = Router();
 
 attendanceRoutes.post("/", createAttendanceController);
-attendanceRoutes.get("/", findAttendanceByIdController);
+attendanceRoutes.get("/", findAttendanceByIdController); // Aqui talvez seja para listar todos, revise depois.
 attendanceRoutes.get("/:id", findAttendanceByIdController);
 attendanceRoutes.put("/:id", updateAttendanceController);
 attendanceRoutes.delete("/:id", deleteAttendanceController);

@@ -1,26 +1,49 @@
 import { IAttendanceRepository } from "../repositories/IAttendanceRepository";
 import { IAttendanceDTO } from "../dtos/IAttendenceDTO";
+import { inject, injectable } from "tsyringe";
+import { z } from "zod";
+import { AppError } from "@shared/errors/AppError";
 
-export class CreateAttendanceUsecase {
-  constructor(private attendanceRepository: IAttendanceRepository) {}
 
-  async execute(data: { studentId?: string; classId?: string; date?: string; status?: 'PRESENT' | 'ABSENT' | 'LATE' }) {
-    const { studentId, classId, date, status } = data;
+const createIattendenceSchema = z.object({
+    studentId: z.string({
+        required_error: "ID do estudante é obrigatório",
+        invalid_type_error: "ID do estudante deve ser uma string"
+    }).uuid("ID do estudante inválido"),
 
-    if (!studentId || !classId) {
-      throw new Error("studentId e classId são obrigatórios.");
+    classId: z.string({
+        required_error: "ID da turma é obrigatório",
+        invalid_type_error: "ID da turma deve ser uma string"
+    }).uuid("ID da turma inválido"),
+
+    guardianId: z.string({
+        required_error: "ID do responsável é obrigatório",
+        invalid_type_error: "ID do responsável deve ser uma string"
+    }).uuid("ID do responsável inválido"),
+}).required().strict();
+
+@injectable()
+export class CreateIattendeceUseCase {
+    constructor(
+        @inject("IAttendanceRepository")
+        private IAttendanceRepository: IAttendanceRepository
+    ) { }
+
+    async execute(data: IAttendanceDTO) {
+        try {
+            const { studentId, classId } = createIattendenceSchema.parse(data);
+
+            const Attendance = await this.IAttendanceRepository.create({
+              studentId,
+              classId,
+              present: true,
+              date: undefined
+            });
+
+            return Attendance;
+        } catch (error) {
+            console.error(error);
+            throw new AppError("Erro ao criar matrícula (CreateEnrollmentUseCase)", 500);
+        }
     }
-
-    // Define a presença com base no status
-    const present = status === "PRESENT";
-
-    const attendanceData: IAttendanceDTO = {
-      studentId,
-      classId,
-      date: date ? new Date(date) : new Date(),
-      present,
-    };
-
-    await this.attendanceRepository.create(attendanceData);
-  }
-}
+} 
