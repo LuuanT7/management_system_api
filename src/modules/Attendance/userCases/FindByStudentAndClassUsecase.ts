@@ -18,7 +18,7 @@ export class FindByIdAttendanceUseCase {
         private AttendanceRepository: IAttendanceRepository
     ) { }
 
-    async execute(id: string): Promise<IAttendanceDTO> {
+    async execute(id: string, classId: string): Promise<IAttendanceDTO> {
         try {
             const { id: validatedId } = findByIdSchema.parse({ id });
             const attendance = await this.AttendanceRepository.findById(validatedId);

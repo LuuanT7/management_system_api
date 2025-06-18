@@ -10,7 +10,7 @@ export class FindAllAttendanceUseCase {
         private AttendenceRepository: IAttendanceRepository
     ) { }
 
-    async execute(id: string): Promise<IAttendanceDTO[]> {
+    async execute(): Promise<IAttendanceDTO[]> {
         try {
             const attendance = await this.AttendenceRepository.findAll();
             return attendance;

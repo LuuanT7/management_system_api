@@ -50,6 +50,13 @@ export class PrismaAttendanceRepository implements IAttendanceRepository {
         });
         return id;
     }
+    
+    async findByClass(classId: string): Promise<IAttendanceDTO[]> {
+    const attendances = await prisma.attendance.findMany({
+        where: { classId },
+    });
+    return attendances;
+}
 }
 
 export const prismaAttendanceRepository = new PrismaAttendanceRepository();

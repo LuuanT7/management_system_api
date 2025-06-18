@@ -8,6 +8,7 @@ export interface IAttendanceRepository {
     create(data: ICreateAttendanceDTO): Promise<IAttendanceDTO>;
     update(data: IUpdateAttendanceDTO): Promise<IAttendanceDTO>;
     delete(id: string): Promise<string>;
+    findByClass(classId: string): Promise<IAttendanceDTO[]>;
 } 
 
 
