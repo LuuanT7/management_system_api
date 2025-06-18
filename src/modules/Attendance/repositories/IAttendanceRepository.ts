@@ -1,5 +1,4 @@
-import { IUpdateAttendanceDTO, IAttendanceDTO, ICreateAttendanceDTO } from "../dtos/IAttendenceDTO";
-
+import { IUpdateAttendanceDTO, IAttendanceDTO, ICreateAttendanceDTO , IClassDTO } from "../dtos/IAttendenceDTO";
 export interface IAttendanceRepository {
     findAll(): Promise<IAttendanceDTO[]>;
     findById(id: string): Promise<IAttendanceDTO>;
@@ -9,6 +8,7 @@ export interface IAttendanceRepository {
     update(data: IUpdateAttendanceDTO): Promise<IAttendanceDTO>;
     delete(id: string): Promise<string>;
     findByClass(classId: string): Promise<IAttendanceDTO[]>;
+    findClassesByTeacher(teacherId: string): Promise<IClassDTO[]>;
 } 
 
 

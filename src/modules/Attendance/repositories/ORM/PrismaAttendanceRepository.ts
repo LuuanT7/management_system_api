@@ -1,4 +1,4 @@
-import { IAttendanceDTO, IUpdateAttendanceDTO, ICreateAttendanceDTO } from "../../dtos/IAttendenceDTO";
+import { IAttendanceDTO, IUpdateAttendanceDTO, ICreateAttendanceDTO, IClassDTO } from "../../dtos/IAttendenceDTO";
 import { IAttendanceRepository } from "../IAttendanceRepository";
 import { prisma } from "@shared/infra/database/prisma";
 
@@ -56,7 +56,13 @@ export class PrismaAttendanceRepository implements IAttendanceRepository {
         where: { classId },
     });
     return attendances;
-}
+    }
+   async findClassesByTeacher(teacherId: string): Promise<IClassDTO[]> {
+    const classes = await prisma.class.findMany({
+      where: { teacherId },
+    });
+    return classes;
+  }
 }
 
 export const prismaAttendanceRepository = new PrismaAttendanceRepository();

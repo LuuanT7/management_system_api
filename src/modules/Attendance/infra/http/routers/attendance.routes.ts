@@ -6,6 +6,7 @@ import { findAttendanceByIdController } from "../controllers/FindAttendanceByIdC
 import { updateAttendanceController } from "../controllers/UpdateAttendanceController";
 import { findAttendanceByStudentAndClassController } from "../controllers/FindAttendanceByStudentAndClassController";
 import { findAttendanceByClassController } from "../controllers/FindAttendanceByClassController";
+import {findClassesByTeacherController} from "../controllers/FindClassesByTeacherController"
 
 const attendanceRoutes = Router();
 
@@ -16,6 +17,6 @@ attendanceRoutes.put("/:id", updateAttendanceController);
 attendanceRoutes.delete("/:id", deleteAttendanceController);
 attendanceRoutes.get("/student/:studentId/class/:classId", findAttendanceByStudentAndClassController);
 attendanceRoutes.get("/class/:classId", findAttendanceByClassController);
-
+attendanceRoutes.get("/class/:classId", findClassesByTeacherController);
 export { attendanceRoutes };
 
