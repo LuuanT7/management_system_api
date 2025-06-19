@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { UpdateAttendanceUseCase } from "../../../userCases/UpdateAttendanceUsecase";
+import { UpdateAttendanceUseCase } from "../../../UseCases/UpdateAttendanceUsecase";
 
 export const updateAttendanceController = async (req: Request, res: Response) => {
     try {

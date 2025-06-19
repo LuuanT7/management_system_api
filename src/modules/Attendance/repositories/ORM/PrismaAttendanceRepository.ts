@@ -63,6 +63,37 @@ export class PrismaAttendanceRepository implements IAttendanceRepository {
     });
     return classes;
   }
+    async findByGuardian(guardianId: string): Promise<IAttendanceDTO[]> {
+    const attendances = await prisma.attendance.findMany({
+        where: {
+        student: {
+            guardianId: guardianId,
+        },
+        },
+        include: {
+        student: true,
+        class: true,
+        },
+    });
+
+    return attendances;
+    }
+    async findByPeriod(startDate: Date, endDate: Date): Promise<IAttendanceDTO[]> {
+     const attendances = await prisma.attendance.findMany({
+    where: {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+    include: {
+      student: true,
+      class: true,
+    },
+    });
+
+    return attendances;
+}
 }
 
 export const prismaAttendanceRepository = new PrismaAttendanceRepository();

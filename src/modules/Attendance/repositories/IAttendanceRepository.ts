@@ -9,6 +9,9 @@ export interface IAttendanceRepository {
     delete(id: string): Promise<string>;
     findByClass(classId: string): Promise<IAttendanceDTO[]>;
     findClassesByTeacher(teacherId: string): Promise<IClassDTO[]>;
+    findByGuardian(guardianId: string): Promise<IAttendanceDTO[]>;
+    findByPeriod(startDate: Date, endDate: Date): Promise<IAttendanceDTO[]>;
+
 } 
 
 

@@ -7,6 +7,8 @@ import { updateAttendanceController } from "../controllers/UpdateAttendanceContr
 import { findAttendanceByStudentAndClassController } from "../controllers/FindAttendanceByStudentAndClassController";
 import { findAttendanceByClassController } from "../controllers/FindAttendanceByClassController";
 import {findClassesByTeacherController} from "../controllers/FindClassesByTeacherController"
+import { findAttendancesByGuardianController } from "../controllers/FindAttendancesByGuardianController";
+import { findAttendancesByPeriodController } from "../controllers/FindAttendancesByPeriodController";
 
 const attendanceRoutes = Router();
 
@@ -18,5 +20,7 @@ attendanceRoutes.delete("/:id", deleteAttendanceController);
 attendanceRoutes.get("/student/:studentId/class/:classId", findAttendanceByStudentAndClassController);
 attendanceRoutes.get("/class/:classId", findAttendanceByClassController);
 attendanceRoutes.get("/class/:classId", findClassesByTeacherController);
+attendanceRoutes.get("/guardian/:guardianId", findAttendancesByGuardianController);
+attendanceRoutes.get("/period", findAttendancesByPeriodController);
 export { attendanceRoutes };
 

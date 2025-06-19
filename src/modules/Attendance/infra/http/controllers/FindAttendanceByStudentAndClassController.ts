@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { FindByIdAttendanceUseCase } from "../../../userCases/FindByStudentAndClassUsecase";
+import { FindByIdAttendanceUseCase } from "../../../UseCases/FindByStudentAndClassUsecase";
 
 export const findAttendanceByStudentAndClassController = async (req: Request, res: Response) => {
     try {

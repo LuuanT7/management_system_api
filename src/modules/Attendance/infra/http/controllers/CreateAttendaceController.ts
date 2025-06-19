@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { CreateIattendeceUseCase } from "../../../userCases/CreateAttendanceUsecases";
-import { DeleteAttendenceUseCase } from "../../../userCases/DeleteAttendanceUsecase";
-import { FindAllAttendanceUseCase } from "../../../userCases/FindAllAttendanceUsecase";
-import { UpdateAttendanceUseCase } from "../../../userCases/UpdateAttendanceUsecase";
+import { CreateIattendeceUseCase } from "../../../UseCases/CreateAttendanceUsecases";
+import { DeleteAttendenceUseCase } from "../../../UseCases/DeleteAttendanceUsecase";
+import { FindAllAttendanceUseCase } from "../../../UseCases/FindAllAttendanceUsecase";
+import { UpdateAttendanceUseCase } from "../../../UseCases/UpdateAttendanceUsecase";
 import { PrismaAttendanceRepository } from "../../../repositories/ORM/PrismaAttendanceRepository";
 
 const repository = new PrismaAttendanceRepository();

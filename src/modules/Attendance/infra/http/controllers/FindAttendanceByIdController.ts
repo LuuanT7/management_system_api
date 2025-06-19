@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { FindAttendanceByIdUseCase } from "../../../userCases/FindAttendanceByIdUseCases";
+import { FindAttendanceByIdUseCase } from "../../../UseCases/FindAttendanceByIdUseCases";
 
 export const findAttendanceByIdController = async (req: Request, res: Response) => {
   const { id } = req.params;

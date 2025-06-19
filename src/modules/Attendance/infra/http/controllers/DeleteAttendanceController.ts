@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { DeleteAttendenceUseCase } from "../../../userCases/DeleteAttendanceUsecase";
+import { DeleteAttendenceUseCase } from "../../../UseCases/DeleteAttendanceUsecase";
 
 export const deleteAttendanceController = async (req: Request, res: Response) => {
     try {
