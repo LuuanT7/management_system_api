@@ -1,48 +1,15 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:postgres@db:5432/project-management?schema=public"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
 }
 
 enum Shift {
   MORNING
   AFTERNOON
-}
-
-model Teacher {
-  id       String   @id @default(uuid())
-  name     String
-  email    String   @unique
-  classes  Class[]
-}
-
-model Class {
-  id          String   @id @default(uuid())
-  name        String
-  createdAt   DateTime @default(now())
-  subject     String
-  shift       Shift
-  startTime   String
-  endTime     String
-  teacherId   String
-  teacher     Teacher  @relation(fields: [teacherId], references: [id])
-}
-model Activity {
-  id          String    @id @default(uuid())
-  title       String
-  description String?   // opcional, pois não está usado no create, mas pode ser útil
-  dueDate     DateTime
-  maxScore    Float
-  weight      Float?    @default(1)
-  type        ActivityType
-  teacherId   String
-  classId     String
-
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
 }
 
 enum ActivityType {
@@ -53,5 +20,74 @@ enum ActivityType {
   EXAM
 }
 
+model Teacher {
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  classes  Class[]
+}
 
+model Class {
+  id          String      @id @default(uuid())
+  name        String
+  createdAt   DateTime    @default(now())
+  subject     String
+  shift       Shift
+  startTime   String
+  endTime     String
+  teacherId   String
+  teacher     Teacher     @relation(fields: [teacherId], references: [id])
+  enrollments Enrollment[]
+  activities  Activity[]
+}
 
+model Student {
+  id         String       @id @default(uuid())
+  name       String
+  email      String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  enrollments Enrollment[]
+  grades     Grade[]
+}
+
+model Enrollment {
+  id         String   @id @default(uuid())
+  studentId  String
+  classId    String
+
+  student    Student  @relation(fields: [studentId], references: [id])
+  class      Class    @relation(fields: [classId], references: [id])
+
+  @@unique([studentId, classId])
+}
+
+model Activity {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  dueDate     DateTime
+  maxScore    Float
+  weight      Float?      @default(1)
+  type        ActivityType
+  teacherId   String
+  classId     String
+
+  class       Class       @relation(fields: [classId], references: [id])
+  grades      Grade[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Grade {
+  id         String     @id @default(uuid())
+  studentId  String
+  activityId String
+  score      Float
+
+  student    Student    @relation(fields: [studentId], references: [id])
+  activity   Activity   @relation(fields: [activityId], references: [id])
+
+  @@unique([studentId, activityId])
+}
