@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules src/app.ts",
-    "build": "prisma generate && tsc",
+    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch node_modules management_system_api/src/app.ts",
     "start": "node dist/app.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev"
