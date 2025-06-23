@@ -56,6 +56,7 @@ model Enrollment {
   id         String   @id @default(uuid())
   studentId  String
   classId    String
+  createdAt  DateTime @default(now()) // 👈 adicionado
 
   student    Student  @relation(fields: [studentId], references: [id])
   class      Class    @relation(fields: [classId], references: [id])
