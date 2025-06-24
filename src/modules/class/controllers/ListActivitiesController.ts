@@ -1,4 +1,3 @@
-// modules/activity/useCases/list/ListActivitiesController.ts
 import { Request, Response } from "express";
 import { ListActivitiesUseCase } from "../../class/useCases/createActivity/listActivity/ListActivitiesUseCase";
 

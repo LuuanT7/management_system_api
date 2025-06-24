@@ -3,7 +3,7 @@ import { Class } from '@prisma/client';
 
 interface CreateClassData {
   name: string;
-  teacherId: number; 
+  teacherId: number;
 }
 
 export class PrismaClassRepository {
@@ -16,12 +16,12 @@ export class PrismaClassRepository {
         }
       },
       include: {
-        teacher: true // Opcional: inclui os dados do professor na resposta
+        teacher: true
       }
     });
   }
 
-  async findById(id: number): Promise<Class | null> { // ID é number (Int)
+  async findById(id: number): Promise<Class | null> {
     return await prisma.class.findUnique({
       where: { id },
       include: {
@@ -41,13 +41,12 @@ export class PrismaClassRepository {
     });
   }
 
-  async delete(id: number): Promise<void> { // ID é number (Int)
+  async delete(id: number): Promise<void> {
     await prisma.class.delete({
       where: { id }
     });
   }
 
-  // Método adicional para atualizar uma classe
   async update(id: number, data: Partial<CreateClassData>): Promise<Class> {
     return await prisma.class.update({
       where: { id },

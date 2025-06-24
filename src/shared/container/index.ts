@@ -1,4 +1,3 @@
-
 import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { IClassRepository } from '../../../src/modules/class/repositories/IClassRepository';

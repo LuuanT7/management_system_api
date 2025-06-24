@@ -1,23 +1,15 @@
 import { Router } from "express";
-
-// Controllers
-import { CreateActivityController } from "../controllers/CreateActivityController";
-import { ListActivitiesController } from "../controllers/ListActivitiesController";
-
-// UseCases
+import { CreateActivityController } from "../../../../class/controllers/CreateActivityController";
+import { ListActivitiesController } from "../../../../class/controllers/ListActivitiesController";
 import { CreateActivityUseCase } from "../../../useCases/createActivity/CreateActivityUseCase";
 import { ListActivitiesUseCase } from "../../../useCases/createActivity/listActivity/ListActivitiesUseCase";
 
 const activityRoutes = Router();
 
-const createActivityUseCase = new CreateActivityUseCase();
-const listActivitiesUseCase = new ListActivitiesUseCase();
+const createActivityController = new CreateActivityController();
+const listActivitiesController = new ListActivitiesController();
 
-const createActivityController = new CreateActivityController(createActivityUseCase);
-const listActivitiesController = new ListActivitiesController(listActivitiesUseCase);
-
-activityRoutes.post("/", createActivityController.handle);
-activityRoutes.get("/", listActivitiesController.handle);
-
+activityRoutes.post("/", createActivityController.handle.bind(createActivityController));
+activityRoutes.get("/", listActivitiesController.handle.bind(listActivitiesController));
 
 export { activityRoutes };
