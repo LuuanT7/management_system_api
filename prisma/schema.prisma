@@ -1,0 +1,110 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Teacher {
+  id          Int        @id @default(autoincrement())
+  name        String
+  email       String     @unique
+  activities  Activity[]
+  classes     Class[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Class {
+  id          Int        @id @default(autoincrement())
+  name        String
+  teacherId   Int
+  teacher     Teacher    @relation(fields: [teacherId], references: [id])
+  enrollments Enrollment[]
+  activities  Activity[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Enrollment {
+  id          Int              @id @default(autoincrement())
+  studentId   Int
+  classId     Int
+  status      EnrollmentStatus
+  student     Student          @relation(fields: [studentId], references: [id])
+  class       Class            @relation(fields: [classId], references: [id])
+  payments    Payment[]
+  grades      Grade[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model Student {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  enrollments Enrollment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Activity {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  dueDate     DateTime
+  maxScore    Float
+  type        ActivityType
+  weight      Float
+  teacherId   Int
+  classId     Int
+  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  class       Class     @relation(fields: [classId], references: [id])
+  grades      Grade[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Grade {
+  id           Int        @id @default(autoincrement())
+  enrollmentId Int
+  activityId   Int
+  score        Float
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  activity     Activity   @relation(fields: [activityId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Payment {
+  id            Int            @id @default(autoincrement())
+  enrollmentId  Int
+  amount        Float
+  paymentDate   DateTime
+  status        PaymentStatus
+  enrollment    Enrollment     @relation(fields: [enrollmentId], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum ActivityType {
+  HOMEWORK
+  TEST
+  PROJECT
+  QUIZ
+  EXAM
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  OVERDUE
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
