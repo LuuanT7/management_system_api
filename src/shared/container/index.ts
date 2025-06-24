@@ -23,6 +23,16 @@ container.registerSingleton<IEnrollmentRepository>(
   PrismaEnrollmentRepository,
 );
 
+container.registerSingleton<IAttendanceRepository>(
+  'IAttendanceRepository',
+  PrismaAttendanceRepository,
+);
+
+
+container.registerSingleton<IClassMaterialRepository>(
+  "ClassMaterialRepository",
+  PrismaClassMaterialRepository
+);
 // container.registerSingleton<IClassRepository>(
 //   'ClassRepository',
 //   PrismaClassRepository,

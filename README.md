@@ -28,9 +28,9 @@ git clone https://github.com/LuuanT7/management_system_api.git
 
 cd management_system_api
 
-Copie o arquivo .env.exemplo:
+Copie o arquivo .env.exemple:
 
-cp .env.exemplo .env
+cd .env.exemple .env
 
 Suba os containers:
 

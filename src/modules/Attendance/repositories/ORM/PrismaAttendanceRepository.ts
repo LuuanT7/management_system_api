@@ -1,70 +1,99 @@
-import { PrismaClient } from "@prisma/client";
-import { IAttendanceDTO } from "../../dtos/IAttendenceDTO";
+import { IAttendanceDTO, IUpdateAttendanceDTO, ICreateAttendanceDTO, IClassDTO } from "../../dtos/IAttendenceDTO";
 import { IAttendanceRepository } from "../IAttendanceRepository";
+import { prisma } from "@shared/infra/database/prisma";
 
-
-
-const prisma = new PrismaClient();
-
-  export class PrismaAttendanceRepository implements IAttendanceRepository {
-    findByStudentAndClass(studentId: string, classId: string): Promise<any | null> {
-      throw new Error("Method not implemented.");
-    }
-    findAll(): Promise<any[]> {
-      throw new Error("Method not implemented.");
+export class PrismaAttendanceRepository implements IAttendanceRepository {
+    async findAll(): Promise<IAttendanceDTO[]> {
+        const attendance = await prisma.attendance.findMany();
+        return attendance as IAttendanceDTO[];
     }
 
-      async findById(id: string) {
-    return await prisma.attendance.findUnique({
-      where: { id },
-    });
-  }
-
-  async delete(id: string) {
-    return await prisma.attendance.delete({
-      where: { id },
-    });
-  }
-
-  async update(id: string, data: Partial<IAttendanceDTO>) {
-    return await prisma.attendance.update({
-      where: { id },
-      data,
-    });
-  }
-
-
-    async findByStudentAndDate(studentId: string, date: Date): Promise<IAttendanceDTO | null> {
-      return await prisma.attendance.findFirst({
-        where: {
-          studentId,
-          date,
-        },
-      });
+    async findById(id: string): Promise<IAttendanceDTO> {
+        const attendance = await prisma.attendance.findUnique({ where: { id } });
+        return attendance as IAttendanceDTO;
     }
 
-    async listByClass(classId: string): Promise<IAttendanceDTO[]> {
-      return await prisma.attendance.findMany({
+    async findByStudentId(studentId: string): Promise<IAttendanceDTO[]> {
+        const attendance = await prisma.attendance.findMany({ where: { studentId } });
+        return attendance as IAttendanceDTO[];
+    }
+
+    async findByClassId(classId: string): Promise<IAttendanceDTO[]> {
+        const attendance = await prisma.attendance.findMany({ where: { classId } });
+        return attendance as IAttendanceDTO[];
+    }
+
+    async create({ studentId, classId, date }: ICreateAttendanceDTO): Promise<IAttendanceDTO> {
+        const attendance = await prisma.attendance.create({
+            data: {
+                studentId,
+                classId,
+                date,
+            }
+        });
+        return attendance as IAttendanceDTO;
+    }
+
+    async update({ id, present }: IUpdateAttendanceDTO): Promise<IAttendanceDTO> {
+        const attendance = await prisma.attendance.update({
+            where: { id },
+            data: {
+                present
+            }
+        });
+        return attendance as IAttendanceDTO;
+    }
+
+    async delete(id: string): Promise<string> {
+        await prisma.attendance.delete({
+            where: { id }
+        });
+        return id;
+    }
+    
+    async findByClass(classId: string): Promise<IAttendanceDTO[]> {
+    const attendances = await prisma.attendance.findMany({
         where: { classId },
-      });
+    });
+    return attendances;
     }
-
-    async create(data: IAttendanceDTO): Promise<void> {
-    await prisma.attendance.create({
-      data: {
-        studentId: data.studentId,
-        classId: data.classId,
-        date: new Date(data.date),
-        present: data.present
-      },
+   async findClassesByTeacher(teacherId: string): Promise<IClassDTO[]> {
+    const classes = await prisma.class.findMany({
+      where: { teacherId },
+    });
+    return classes;
+  }
+    async findByGuardian(guardianId: string): Promise<IAttendanceDTO[]> {
+    const attendances = await prisma.attendance.findMany({
+        where: {
+        student: {
+            guardianId: guardianId,
+        },
+        },
+        include: {
+        student: true,
+        class: true,
+        },
     });
 
-  
-  }
-  
+    return attendances;
+    }
+    async findByPeriod(startDate: Date, endDate: Date): Promise<IAttendanceDTO[]> {
+     const attendances = await prisma.attendance.findMany({
+    where: {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+    include: {
+      student: true,
+      class: true,
+    },
+    });
 
+    return attendances;
 }
+}
+
 export const prismaAttendanceRepository = new PrismaAttendanceRepository();
-
-
-

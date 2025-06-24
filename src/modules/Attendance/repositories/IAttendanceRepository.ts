@@ -1,15 +1,17 @@
-import { promises } from "dns";
-import { IAttendanceDTO } from "../dtos/IAttendenceDTO";
+import { IUpdateAttendanceDTO, IAttendanceDTO, ICreateAttendanceDTO , IClassDTO } from "../dtos/IAttendenceDTO";
+export interface IAttendanceRepository {
+    findAll(): Promise<IAttendanceDTO[]>;
+    findById(id: string): Promise<IAttendanceDTO>;
+    findByStudentId(studentId: string): Promise<IAttendanceDTO[]>;
+    findByClassId(classId: string): Promise<IAttendanceDTO[]>;
+    create(data: ICreateAttendanceDTO): Promise<IAttendanceDTO>;
+    update(data: IUpdateAttendanceDTO): Promise<IAttendanceDTO>;
+    delete(id: string): Promise<string>;
+    findByClass(classId: string): Promise<IAttendanceDTO[]>;
+    findClassesByTeacher(teacherId: string): Promise<IClassDTO[]>;
+    findByGuardian(guardianId: string): Promise<IAttendanceDTO[]>;
+    findByPeriod(startDate: Date, endDate: Date): Promise<IAttendanceDTO[]>;
 
-export interface IAttendanceRepository{
-    create(data: IAttendanceDTO): Promise<void>;
-    findByStudentAndDate(studentId: string, date: Date): Promise<IAttendanceDTO | null>
-    listByClass(classId: string): Promise<IAttendanceDTO[]>
-    findAll(): Promise<any[]>;
-    findById(id: string): Promise<any | null>;
-    delete(id: string): Promise<any>;
-    update(id: string, data: Partial<IAttendanceDTO>): Promise<any>;
-    findByStudentAndClass(studentId: string, classId: string): Promise<any | null>;
-}
+} 
 
 

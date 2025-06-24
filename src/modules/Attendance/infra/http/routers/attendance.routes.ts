@@ -1,19 +1,26 @@
 import { Router } from "express";
-import { CreateAttendanceUsecase } from "../../../userCases/CreateAttendanceUsecases";
-import { FindAllAttendanceUsecase } from "../../../userCases/FindAllAttendanceUsecase";
-import { FindAttendanceByIdUsecase } from "../../../userCases/FindAttendanceByIdUsecase";
-import { UpdateAttendanceUsecase } from "../../../userCases/UpdateAttendanceUsecase";
-import { DeleteAttendanceUsecase } from "../../../userCases/DeleteAttendanceUsecase";
-import { createAttendanceController, deleteAttendanceController, findAttendanceByIdController, updateAttendanceController } from "../controllers/AttendaceController";
-import { findByStudentAndClassController } from "../controllers/FindByStudentAndClassController";
+import { createAttendanceController } from "../controllers/CreateAttendaceController";
+import { deleteAttendanceController } from "../controllers/DeleteAttendanceController";
+import { findAllAttendanceController } from "../controllers/FindAllAttendanceController";
+import { findAttendanceByIdController } from "../controllers/FindAttendanceByIdController";
+import { updateAttendanceController } from "../controllers/UpdateAttendanceController";
+import { findAttendanceByStudentAndClassController } from "../controllers/FindAttendanceByStudentAndClassController";
+import { findAttendanceByClassController } from "../controllers/FindAttendanceByClassController";
+import {findClassesByTeacherController} from "../controllers/FindClassesByTeacherController"
+import { findAttendancesByGuardianController } from "../controllers/FindAttendancesByGuardianController";
+import { findAttendancesByPeriodController } from "../controllers/FindAttendancesByPeriodController";
 
 const attendanceRoutes = Router();
 
 attendanceRoutes.post("/", createAttendanceController);
-attendanceRoutes.get("/", findAttendanceByIdController);
+attendanceRoutes.get("/", findAllAttendanceController);
 attendanceRoutes.get("/:id", findAttendanceByIdController);
 attendanceRoutes.put("/:id", updateAttendanceController);
 attendanceRoutes.delete("/:id", deleteAttendanceController);
-attendanceRoutes.get("/student/:studentId/class/:classId", findByStudentAndClassController);
-
+attendanceRoutes.get("/student/:studentId/class/:classId", findAttendanceByStudentAndClassController);
+attendanceRoutes.get("/class/:classId", findAttendanceByClassController);
+attendanceRoutes.get("/class/:classId", findClassesByTeacherController);
+attendanceRoutes.get("/guardian/:guardianId", findAttendancesByGuardianController);
+attendanceRoutes.get("/period", findAttendancesByPeriodController);
 export { attendanceRoutes };
+
