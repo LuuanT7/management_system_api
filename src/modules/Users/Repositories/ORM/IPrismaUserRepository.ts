@@ -4,12 +4,12 @@ import {
   IUpdateUserDTO,
 } from '@modules/Users/DTOS/IUserDTO';
 import { prisma } from '@shared/infra/database/prisma';
-import { IUserRepository } from '@modules/Users/repositories/IUserRepository';
 import { Prisma } from '@prisma/client';
 import {
   IPaginatedResult,
   IPaginationParams,
 } from '@shared/interfaces/pagination';
+import { IUserRepository } from '../IUserRepository';
 
 //repositorio prisma, como se fosse um model do mvc utilizando orm prisma
 // todos os metodos criado na IUserRepository tem que estar aqui
@@ -67,7 +67,7 @@ export class IPrismaUserRepository implements IUserRepository {
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
-        UserAddress: true,
+        UserAddresses: true,
       },
     });
     return user;

@@ -1,5 +1,11 @@
-import { IProfileStudentDTO } from '../DTOS/IProfileDTO';
+import {
+  IProfileGuardianDTO,
+  IStudentProfileDTO,
+  ITeacherProfileDTO,
+} from '../DTOS/IProfileDTO';
 
 export interface IProfileRepository {
-  profileStudent(id: string): Promise<IProfileStudentDTO>;
+  profileStudent(userId: string): Promise<IStudentProfileDTO>;
+  profileTeacher(id: string): Promise<ITeacherProfileDTO>;
+  profileGuardian(id: string): Promise<IProfileGuardianDTO>;
 }
