@@ -23,7 +23,7 @@ export class PrismaEnrollmentRepository implements IEnrollmentRepository {
         return enrollments as IEnrollmentDTO[];
     }
 
-    async create({ studentId, classId, guardianId, paymentStatus = "PENDING", paymentId, active = true }: ICreateEnrollmentDTO): Promise<IEnrollmentDTO> {
+    async create({ studentId, classId, guardianId, paymentStatus, paymentId, active }: ICreateEnrollmentDTO): Promise<IEnrollmentDTO> {
         const enrollment = await prisma.enrollment.create({
             data: {
                 studentId,
@@ -53,6 +53,6 @@ export class PrismaEnrollmentRepository implements IEnrollmentRepository {
         await prisma.enrollment.delete({
             where: { id }
         });
-        return id;
+        return "Enrollment deleted successfully";
     }
 } 

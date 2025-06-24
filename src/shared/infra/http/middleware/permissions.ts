@@ -1,52 +1,27 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from "express";
 
-// Configuração direta das permissões
-const permissions = {
-  ADMIN: {
-    'v1/users': ['GET', 'POST', 'PUT', 'DELETE'],
-  },
-  TEACHER: {
-    'v1/users': ['GET'],
-  },
-  GUARDIAN: {
-    'v1/users/:id': ['GET'],
-   
-  },
-  STUDENT: {  
-    'v1/users/:id': ['GET'],
 
-  }
-
-};
-
-export function checkPermission(req: Request, res: Response, next: NextFunction) {
-  const user = req.user; // Assume que o usuário está autenticado
-  const { path, method } = req;
+const permission = (allowedRoles) => {
+    return (req:Request, res:Response, next:NextFunction) => {
+      // 1. Verifica se o usuário está autenticado e tem uma role
+      if (!req.user || !req.user.role) {
+        return res.status(401).json({
+          success: false,
+          message: 'Acesso não autorizado: usuário não autenticado'
+        });
+      }
   
-
-  if (!user || !user.role) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
-  }
-
-  const rolePermissions = permissions[user.role];
-
-  if (!rolePermissions) {
-    return res.status(403).json({ error: 'Role não encontrada' });
-  }
-
-  // Encontra a rota mais específica que corresponde
-  const matchingRoute = Object.keys(rolePermissions)
-    .filter(route => path.startsWith(route))
-    .sort((a, b) => b.length - a.length)[0];
-
-  if (!matchingRoute) {
-    return res.status(403).json({ error: 'Rota não permitida' });
-  }
-
-  // Verifica se o método é permitido
-  if (!rolePermissions[matchingRoute].includes(method)) {
-    return res.status(403).json({ error: 'Método não permitido' });
-  }
-
-  next();
-}
+      // 2. Verifica se a role do usuário está entre as permitidas
+      if (allowedRoles.includes(req.user.role)) {
+        return next(); // Acesso permitido
+      }
+  
+      // 3. Se não tiver permissão
+      res.status(403).json({
+        success: false,
+        message: `Acesso negado: a role ${req.user.role} não tem permissão para esta ação`
+      });
+    };
+  };
+  
+  export default permission;
