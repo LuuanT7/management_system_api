@@ -269,3 +269,5 @@ model Payment {
   Guardian   Guardian     @relation(fields: [guardianId], references: [id])
   Enrollment Enrollment[]
 }
+
+
