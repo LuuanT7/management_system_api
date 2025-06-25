@@ -1,5 +1,4 @@
-import { prisma } from "../../../../../shared/infra/prisma/client";
-
+import { prisma } from "@shared/infra/database/prisma";
 export class DeleteActivityUseCase {
   async execute(id: string): Promise<void> {
     const activity = await prisma.activity.findUnique({
