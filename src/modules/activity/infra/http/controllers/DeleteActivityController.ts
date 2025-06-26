@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { DeleteActivityUseCase } from '../useCases/createActivity/deleteActivity/DeleteActivityUseCase';
+import { DeleteActivityUseCase } from '../../../useCases/DeleteActivityUseCase';
 
 export class DeleteActivityController {
   async handle(req: Request, res: Response): Promise<Response> {

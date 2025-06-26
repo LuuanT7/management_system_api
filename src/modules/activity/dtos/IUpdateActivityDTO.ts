@@ -1,11 +1,11 @@
-import { ActivityType } from './types/ActivityType';
+import { ActivityType } from "@prisma/client";
 
-export interface UpdateActivityDTO {
+export interface IUpdateActivityDTO {
   id: string;
   title?: string;
   description?: string;
   dueDate?: Date;
   maxScore?: number;
   type?: ActivityType;
-  weight?: number;
+  classId?: string;
 }

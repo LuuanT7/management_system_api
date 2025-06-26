@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ListActivitiesUseCase } from '../useCases/createActivity/listActivity/ListActivitiesUseCase';
+import { ListActivitiesUseCase } from '../../../useCases/ListActivitiesUseCase';
 
 export class ListActivitiesController {
   constructor(private listActivitiesUseCase: ListActivitiesUseCase) {}
