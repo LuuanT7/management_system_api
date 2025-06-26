@@ -12,6 +12,8 @@ import { PrismaGuardianRepository } from '@modules/Users/Guardian/repositories/o
 import { IUserRepository } from '@modules/Users/Repositories/IUserRepository';
 import { PrismaProfileRepository } from '@modules/Profile/repositories/orm/IPrismaProfileRepository';
 import { IProfileRepository } from '@modules/Profile/repositories/IProfileRepository';
+import { IClassMaterialRepository } from '@modules/ClassMaterial/repositories/IClassMaterialRepository';
+import { PrismaClassMaterialRepository } from '@modules/ClassMaterial/repositories/ORM/PrismaClassMaterialRepository';
 
 container.registerSingleton<IUserRepository>(
   'UserRepository',
@@ -28,10 +30,9 @@ container.registerSingleton<IAttendanceRepository>(
   PrismaAttendanceRepository,
 );
 
-
 container.registerSingleton<IClassMaterialRepository>(
-  "ClassMaterialRepository",
-  PrismaClassMaterialRepository
+  'ClassMaterialRepository',
+  PrismaClassMaterialRepository,
 );
 // container.registerSingleton<IClassRepository>(
 //   'ClassRepository',

@@ -1,5 +1,10 @@
 🎓 Sistema de Gerenciamento Escolar
 
+Autores:
+Luan Teixeira RA: 6322504
+Alisson Ribeiro RA:6324605
+Danilo Lenardi RA: 6324049
+
 Uma API REST para gerenciamento completo de usuários, matrícula, presenças, avaliações, boletins, materiais de aula, notificações e pagamentos. Desenvolvida com Node.js, PostgreSQL, Docker e Nginx.
 
 🚀 Stack utilizada
@@ -35,6 +40,22 @@ cd .env.exemple .env
 Suba os containers:
 
 docker-compose up --build
+
+Entre no bash do container node
+
+docker compose exec -it node_management_system_container bash
+
+Execute o codigo:
+
+npx prisma migrate dev
+
+Para que crie as migrations
+
+Para pré popular o banco use o comando dentro do bash
+
+npm run prisma:seed
+
+para que execute as seeds e crie os usuarios admins entre outros dados.
 
 Acesse a aplicação:
 
@@ -122,9 +143,7 @@ Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outro
 
 🔎 Teste a API no Postman
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/team-monkey/workspace/management-system/collection/29388628-f8ced165-b863-41da-97b2-047c3e0c26b4?action=share&creator=29388628 )
-
-
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://www.postman.com/team-monkey/workspace/management-system/collection/29388628-f8ced165-b863-41da-97b2-047c3e0c26b4?action=share&creator=29388628)
 
 🐘 Banco de Dados
 
