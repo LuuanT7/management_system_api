@@ -1,5 +1,5 @@
-import { ICreateStudentDTO } from "../DTOS/IStudentDTO";
+import { ICreateStudentDTO } from '../DTOS/IStudentDTO';
 
 export interface IStudentRepository {
-    create(data: ICreateStudentDTO): Promise<ICreateStudentDTO>
+  create(data: ICreateStudentDTO): Promise<ICreateStudentDTO>;
 }

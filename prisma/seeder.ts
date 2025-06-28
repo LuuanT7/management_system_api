@@ -1,12 +1,18 @@
 import { PrismaClient } from '@prisma/client';
-import { CreateUserAdmins } from './seeds/users.seed';
+import { CreateUsers } from './seeds/users.seed';
+import { CreateClass } from './seeds/class.seed';
+import { CreateEnrollment } from './seeds/enrollment.seed';
 
 const prisma = new PrismaClient();
 
 async function main() {
   try {
-    await CreateUserAdmins();
-    console.log('Seed executado com sucesso!');
+    await CreateUsers();
+    console.log('Users Seed executado com sucesso!');
+    await CreateClass();
+    console.log('Classes Seed executado com sucesso!');
+    await CreateEnrollment();
+    console.log('Enrollments Seed executado com sucesso!');
   } catch (error) {
     console.error('Erro ao executar seed:', error);
     throw error;
@@ -15,8 +21,7 @@ async function main() {
   }
 }
 
-main()
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  }); 
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

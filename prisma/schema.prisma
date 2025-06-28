@@ -68,12 +68,12 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  tokens       Token[]
-  student      Student?
-  teacher      Teacher?
-  guardian     Guardian?
-  Notification Notification[]
-  UserAddress  UserAddress[]
+  Tokens       Token[] 
+  Student      Student?
+  Teacher      Teacher[]
+  Guardian     Guardian[]
+  Notifications Notification[]
+  UserAddresses  UserAddress[]
 }
 
 model UserAddress {
@@ -86,7 +86,7 @@ model UserAddress {
   zipCode      String
   complement   String?
   neighborhood String?
-  user         User     @relation(fields: [userId], references: [id])
+  User         User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -98,8 +98,9 @@ model Token {
   token     String   @unique
   type      String
   expires   DateTime
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
+
+  User      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -108,29 +109,29 @@ model Token {
 
 model Guardian {
   id         String       @id @default(uuid())
-  userId     String       @unique
-  user       User         @relation(fields: [userId], references: [id])
-  students   Student[]
-  payments   Payment[]
+  userId     String       
+  User       User         @relation(fields: [userId], references: [id])
+  Students   Student[]
+  Payments   Payment[]
   Enrollment Enrollment[]
 }
 
 model Student {
-  id          String        @id @default(uuid())
+  ra         Int        @id @default(autoincrement())
   userId      String        @unique
   guardianId  String
-  user        User          @relation(fields: [userId], references: [id])
-  guardian    Guardian      @relation(fields: [guardianId], references: [id])
-  enrollments Enrollment[]
-  attendance  Attendance[]
+  User        User          @relation(fields: [userId], references: [id])
+  Guardian    Guardian      @relation(fields: [guardianId], references: [id])
+  Enrollments Enrollment[]
+  Attendance  Attendance[]
   GradeReport GradeReport[]
 }
 
 model Teacher {
   id      String  @id @default(uuid())
-  userId  String  @unique
-  user    User    @relation(fields: [userId], references: [id])
-  classes Class[]
+  userId  String  
+  User    User    @relation(fields: [userId], references: [id])
+  Class Class[]
 }
 
 enum Shift {
@@ -145,8 +146,8 @@ model Class {
   shift         Shift           @default(MORNING)
   teacherId     String
   teacher       Teacher         @relation(fields: [teacherId], references: [id])
-  enrollments   Enrollment[]
-  attendance    Attendance[]
+  Enrollments   Enrollment[]
+  Attendance    Attendance[]
   GradeReport   GradeReport[]
   Activity      Activity[]
   ClassMaterial ClassMaterial[]
@@ -155,15 +156,15 @@ model Class {
 // Modelo de Boletim Escolar
 model GradeReport {
   id        String   @id @default(uuid()) // ID único gerado automaticamente
-  studentId String // ID do aluno (relacionamento)
   classId   String // ID da turma/disciplina
   period    String // Período letivo (ex: "1º Bimestre")
   average   Float // Média geral do aluno no período
   status    String // Situação: Aprovado/Reprovado/Recuperação
   notes     String? // Observações complementares
-  student   Student  @relation(fields: [studentId], references: [id]) // Relação com Student
-  class     Class    @relation(fields: [classId], references: [id]) // Relação com Class
-  grades    Grade[] // Lista de notas individuais
+  studentRA Int // RA do aluno (relacionamento)
+  Student   Student  @relation(fields: [studentRA], references: [ra]) // Relação com Student
+  Class     Class    @relation(fields: [classId], references: [id]) // Relação com Class
+  Grade    Grade[] // Lista de notas individuais
   createdAt DateTime @default(now()) // Data de criação do registro
   updatedAt DateTime @updatedAt // Data da última atualização
 }
@@ -176,8 +177,8 @@ model Grade {
   value         Float // Valor da nota (0-10)
   weight        Float       @default(1.0) // Peso na média final
   comments      String? // Comentários do professor
-  gradeReport   GradeReport @relation(fields: [gradeReportId], references: [id]) // Relação com GradeReport
-  activity      Activity    @relation(fields: [activityId], references: [id]) // Relação com Activity
+  GradeReport   GradeReport @relation(fields: [gradeReportId], references: [id]) // Relação com GradeReport
+  Activity      Activity    @relation(fields: [activityId], references: [id]) // Relação com Activity
   createdAt     DateTime    @default(now()) // Data de criação
   updatedAt     DateTime    @updatedAt // Data de atualização
 }
@@ -191,8 +192,8 @@ model Activity {
   type        ActivityType // Tipo: Tarefa/Prova/Projeto/etc.
   dueDate     DateTime // Data de entrega
   maxScore    Float        @default(10.0) // Valor máximo da atividade
-  class       Class        @relation(fields: [classId], references: [id]) // Relação com Class
-  grades      Grade[] // Notas atribuídas
+  Class       Class        @relation(fields: [classId], references: [id]) // Relação com Class
+  Grade      Grade[] // Notas atribuídas
   createdAt   DateTime     @default(now()) // Data de criação
   updatedAt   DateTime     @updatedAt // Data de atualização
 }
@@ -205,7 +206,7 @@ model ClassMaterial {
   description String? // Descrição do conteúdo
   fileUrl     String? // URL do arquivo (PDF, PPT, etc.)
   isPublished Boolean  @default(false) // Se está disponível para alunos
-  class       Class    @relation(fields: [classId], references: [id]) // Relação com Class
+  Class       Class    @relation(fields: [classId], references: [id]) // Relação com Class
   createdAt   DateTime @default(now()) // Data de criação
   updatedAt   DateTime @updatedAt // Data de atualização
 }
@@ -220,7 +221,7 @@ model Notification {
   relatedType RelatedType? // Tipo do recurso relacionado
   isRead      Boolean          @default(false) // Se foi lida
   readAt      DateTime? // Data de leitura
-  user        User             @relation(fields: [userId], references: [id]) // Relação com User
+  User        User             @relation(fields: [userId], references: [id]) // Relação com User
   createdAt   DateTime         @default(now()) // Data de criação
   updatedAt   DateTime         @updatedAt // Data de atualização
 
@@ -235,27 +236,27 @@ enum PaymentStatus {
 
 model Enrollment {
   id            String        @id @default(uuid())
-  studentId     String
   classId       String
   guardianId    String
   paymentStatus PaymentStatus @default(PENDING)
   enrolledAt    DateTime      @default(now())
   paymentId     String?
   active        Boolean       @default(true)
-  student       Student       @relation(fields: [studentId], references: [id])
-  guardian      Guardian      @relation(fields: [guardianId], references: [id])
-  class         Class         @relation(fields: [classId], references: [id])
-  payment       Payment?      @relation(fields: [paymentId], references: [id])
+  studentRA Int // RA do aluno (relacionamento)
+  Student   Student  @relation(fields: [studentRA], references: [ra]) // Relação com Student
+  Guardian      Guardian      @relation(fields: [guardianId], references: [id])
+  Class         Class         @relation(fields: [classId], references: [id])
+  Payment       Payment?      @relation(fields: [paymentId], references: [id])
 }
 
 model Attendance {
   id        String   @id @default(uuid())
-  studentId String
   classId   String
   date      DateTime
   present   Boolean
-  student   Student  @relation(fields: [studentId], references: [id])
-  class     Class    @relation(fields: [classId], references: [id])
+  studentRA Int // RA do aluno (relacionamento)
+  Student   Student  @relation(fields: [studentRA], references: [ra]) // Relação com Student
+  Class     Class    @relation(fields: [classId], references: [id])
 }
 
 model Payment {
@@ -265,6 +266,8 @@ model Payment {
   dueDate    DateTime
   paid       Boolean      @default(false)
   paidAt     DateTime?
-  guardian   Guardian     @relation(fields: [guardianId], references: [id])
+  Guardian   Guardian     @relation(fields: [guardianId], references: [id])
   Enrollment Enrollment[]
 }
+
+

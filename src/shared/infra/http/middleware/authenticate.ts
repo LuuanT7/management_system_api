@@ -12,7 +12,6 @@ interface ITokenPayload {
   role?: string;
 }
 
-
 export function authenticate(
   request: Request,
   response: Response,
@@ -35,11 +34,10 @@ export function authenticate(
       name,
       role,
     };
-    console.log("USER AUTHENTICATED", chalk.green(request.user))
 
     return next();
   } catch (err) {
-    console.log("ERROR", chalk.red(err))
+    console.log('ERROR', chalk.red(err));
     throw new AppError('Token JWT inválido', 401);
   }
 }
