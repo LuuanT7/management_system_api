@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { IAttendanceDTO, IUpdateAttendanceDTO, ICreateAttendanceDTO, IClassDTO } from "../../dtos/IAttendenceDTO";
 import { IAttendanceRepository } from "../IAttendanceRepository";
 import { prisma } from "@shared/infra/database/prisma";
@@ -28,8 +29,8 @@ export class PrismaAttendanceRepository implements IAttendanceRepository {
             data: {
                 studentId,
                 classId,
-                date,
-            }
+                date 
+            } as Prisma.AttendanceUncheckedCreateInput
         });
         return attendance as IAttendanceDTO;
     }

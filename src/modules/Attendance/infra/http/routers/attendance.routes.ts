@@ -1,19 +1,11 @@
 import { Router } from "express";
-import { createAttendanceController } from "../controllers/CreateAttendaceController";
-import { deleteAttendanceController } from "../controllers/DeleteAttendanceController";
-import { findAllAttendanceController } from "../controllers/FindAllAttendanceController";
-import { findAttendanceByIdController } from "../controllers/FindAttendanceByIdController";
-import { updateAttendanceController } from "../controllers/UpdateAttendanceController";
-import { findAttendanceByStudentAndClassController } from "../controllers/FindAttendanceByStudentAndClassController";
-import { findAttendanceByClassController } from "../controllers/FindAttendanceByClassController";
-import {findClassesByTeacherController} from "../controllers/FindClassesByTeacherController"
-import { findAttendancesByGuardianController } from "../controllers/FindAttendancesByGuardianController";
-import { findAttendancesByPeriodController } from "../controllers/FindAttendancesByPeriodController";
+import { CreateAttendanceController } from "../controllers/CreateAttendaceController";
 
 const attendanceRoutes = Router();
+const createAttendanceController = new CreateAttendanceController();
 
-attendanceRoutes.post("/", createAttendanceController);
-attendanceRoutes.get("/", findAllAttendanceController);
+attendanceRoutes.post("/", (req, res) => createAttendanceController.handle(req, res));
+/*attendanceRoutes.get("/", findAllAttendanceController);
 attendanceRoutes.get("/:id", findAttendanceByIdController);
 attendanceRoutes.put("/:id", updateAttendanceController);
 attendanceRoutes.delete("/:id", deleteAttendanceController);
@@ -21,6 +13,6 @@ attendanceRoutes.get("/student/:studentId/class/:classId", findAttendanceByStude
 attendanceRoutes.get("/class/:classId", findAttendanceByClassController);
 attendanceRoutes.get("/class/:classId", findClassesByTeacherController);
 attendanceRoutes.get("/guardian/:guardianId", findAttendancesByGuardianController);
-attendanceRoutes.get("/period", findAttendancesByPeriodController);
+attendanceRoutes.get("/period", findAttendancesByPeriodController);*/
 export { attendanceRoutes };
 

@@ -7,6 +7,8 @@ import { IEnrollmentRepository } from "@modules/Enrollment/repositories/IEnrollm
 import { PrismaEnrollmentRepository } from "@modules/Enrollment/repositories/orm/PrismaEnrollmentRepository";
 import {PrismaClassMaterialRepository} from "../../modules/ClassMaterial/repositories/ORM/PrismaClassMaterialRepository"
 import {IClassMaterialRepository} from "../../modules/ClassMaterial/repositories/IClassMaterialRepository"
+import {PrismaNotificationRepository} from "../../modules/Notification/repositories/ORM/PrismaNotificationRepository"
+import {INotificationRepository} from "../../modules/Notification/repositories/INotificationRepository"
 
 container.registerSingleton<IUserRepository>(
   'UserRepository',
@@ -27,4 +29,9 @@ container.registerSingleton<IAttendanceRepository>(
 container.registerSingleton<IClassMaterialRepository>(
   "ClassMaterialRepository",
   PrismaClassMaterialRepository
+);
+
+container.registerSingleton<INotificationRepository>(
+  "NotificationRepository",
+  PrismaNotificationRepository
 );
