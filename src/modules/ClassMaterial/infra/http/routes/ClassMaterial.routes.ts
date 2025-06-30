@@ -1,15 +1,21 @@
 import { Router } from "express";
-import { createDidacticMaterialController } from "../controller/CreateDidacticMaterialController";
-import { listPublishedMaterialsByClassController } from "../controller/ListPublishedMaterialsByClassController";
-import { listMaterialsByTeacherController } from "../controller/ListMaterialsByTeacherController";
-import { listPublishedMaterialsForStudentsController } from "../controller/ListPublishedMaterialsForStudentsController";
+import { CreateDidacticMaterialController } from "../controller/CreateDidacticMaterialController";
+import { ListPublishedMaterialsByClassController } from "../controller/ListPublishedMaterialsByClassController";
+import { ListPublishedMaterialsForStudentsController } from "../controller/ListPublishedMaterialsForStudentsController";
+import { ListMaterialsByTeacherController } from "../controller/ListMaterialsByTeacherController";
+import { authenticate } from "@shared/infra/http/middleware/authenticate";
 
+const classMaterialRoutes = Router();
 
+const createDidacticMaterialController = new CreateDidacticMaterialController();
+const listPublishedMaterialsByClassController = new ListPublishedMaterialsByClassController();
+const listPublishedMaterialsForStudentsController = new ListPublishedMaterialsForStudentsController();
+const listMaterialsByTeacherController = new ListMaterialsByTeacherController();
 
-const ClassMaterialRoutes = Router();
-ClassMaterialRoutes.post("/", createDidacticMaterialController);
-ClassMaterialRoutes.get("/class/:classId", listPublishedMaterialsByClassController);
-ClassMaterialRoutes.get("/teacher/:teacherId", listMaterialsByTeacherController);
-ClassMaterialRoutes.get("/student/class/:classId", listPublishedMaterialsForStudentsController);
+classMaterialRoutes.post("/", authenticate, createDidacticMaterialController.handle);
+classMaterialRoutes.get("/published/:classId", authenticate, listPublishedMaterialsByClassController.handle);
+classMaterialRoutes.get("/published/student/:classId", authenticate, listPublishedMaterialsForStudentsController.handle);
+classMaterialRoutes.get("/teacher/:teacherId", authenticate, listMaterialsByTeacherController.handle);
 
-export { ClassMaterialRoutes };
+export { classMaterialRoutes };
+
