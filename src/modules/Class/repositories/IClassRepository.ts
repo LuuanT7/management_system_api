@@ -1,15 +1,11 @@
-import { Class } from '@prisma/client';
+import { IClassDTO } from '../dtos/IClassDTO';
 
-export interface ICreateClassDTO {
-  name: string;
-  subject: string;
-  teacherId: number;
-  schedule: string;
+export interface IClassFilters {
+  teacherId?: string;
+  subject?: string;
+  shift?: 'MORNING' | 'AFTERNOON';
 }
 
 export interface IClassRepository {
-  create(data: ICreateClassDTO): Promise<Class>;
-  findById(id: number): Promise<Class | null>; 
-  list(): Promise<Class[]>;
-  delete(id: number): Promise<void>; 
+  findAll(filters?: IClassFilters): Promise<IClassDTO[]>;
 }
