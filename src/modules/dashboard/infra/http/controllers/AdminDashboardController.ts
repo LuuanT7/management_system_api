@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { ListEnrollmentSummaryUseCase } from '../useCases/ListEnrollmentSummaryUseCase';
+import { ListEnrollmentSummaryUseCase } from '../../../useCases/ListEnrollmentSummaryUseCase';
 
 export class AdminDashboardController {
   async getEnrollmentSummary(request: Request, response: Response): Promise<Response> {
