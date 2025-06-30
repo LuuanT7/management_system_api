@@ -5,7 +5,6 @@ export interface IActivityRepository {
   listAll(): Promise<Activity[]>; 
   create(data: ICreateActivityDTO): Promise<Activity>;
   listByClassId(classId: string): Promise<Activity[]>;
-  listByStudentId(studentId: string): Promise<Activity[]>;
+  listByStudentId(studentRA: number): Promise<Activity[]>;  // alterado aqui
   delete(id: string): Promise<void>;
 }
-

@@ -4,11 +4,10 @@ generator client {
 
 // Temporariamente desabilitado para o build do Docker
 // generator erd {
- // provider  = "prisma-erd-generator"
- // output    = "erd.svg"
- // format    = "svg"
- // puppeteer = true
-
+// provider  = "prisma-erd-generator"
+// output    = "erd.svg"
+// format    = "svg"
+// puppeteer = true
 
 datasource db {
   provider = "postgresql"
@@ -68,12 +67,12 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  Tokens       Token[] 
-  Student      Student?
-  Teacher      Teacher[]
-  Guardian     Guardian[]
+  Tokens        Token[]
+  Student       Student?
+  Teacher       Teacher[]
+  Guardian      Guardian[]
   Notifications Notification[]
-  UserAddresses  UserAddress[]
+  UserAddresses UserAddress[]
 }
 
 model UserAddress {
@@ -94,11 +93,11 @@ model UserAddress {
 }
 
 model Token {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  type      String
-  expires   DateTime
-  userId    String
+  id      String   @id @default(uuid())
+  token   String   @unique
+  type    String
+  expires DateTime
+  userId  String
 
   User      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
@@ -109,7 +108,7 @@ model Token {
 
 model Guardian {
   id         String       @id @default(uuid())
-  userId     String       
+  userId     String
   User       User         @relation(fields: [userId], references: [id])
   Students   Student[]
   Payments   Payment[]
@@ -117,7 +116,7 @@ model Guardian {
 }
 
 model Student {
-  ra         Int        @id @default(autoincrement())
+  ra          Int           @id @default(autoincrement())
   userId      String        @unique
   guardianId  String
   User        User          @relation(fields: [userId], references: [id])
@@ -128,10 +127,10 @@ model Student {
 }
 
 model Teacher {
-  id      String  @id @default(uuid())
-  userId  String  
-  User    User    @relation(fields: [userId], references: [id])
-  Class Class[]
+  id     String  @id @default(uuid())
+  userId String
+  User   User    @relation(fields: [userId], references: [id])
+  Class  Class[]
 }
 
 enum Shift {
@@ -164,7 +163,7 @@ model GradeReport {
   studentRA Int // RA do aluno (relacionamento)
   Student   Student  @relation(fields: [studentRA], references: [ra]) // Relação com Student
   Class     Class    @relation(fields: [classId], references: [id]) // Relação com Class
-  Grade    Grade[] // Lista de notas individuais
+  Grade     Grade[] // Lista de notas individuais
   createdAt DateTime @default(now()) // Data de criação do registro
   updatedAt DateTime @updatedAt // Data da última atualização
 }
@@ -193,7 +192,7 @@ model Activity {
   dueDate     DateTime // Data de entrega
   maxScore    Float        @default(10.0) // Valor máximo da atividade
   Class       Class        @relation(fields: [classId], references: [id]) // Relação com Class
-  Grade      Grade[] // Notas atribuídas
+  Grade       Grade[] // Notas atribuídas
   createdAt   DateTime     @default(now()) // Data de criação
   updatedAt   DateTime     @updatedAt // Data de atualização
 }
@@ -242,11 +241,13 @@ model Enrollment {
   enrolledAt    DateTime      @default(now())
   paymentId     String?
   active        Boolean       @default(true)
-  studentRA Int // RA do aluno (relacionamento)
-  Student   Student  @relation(fields: [studentRA], references: [ra]) // Relação com Student
+  studentRA     Int // RA do aluno (relacionamento)
+  Student       Student       @relation(fields: [studentRA], references: [ra]) // Relação com Student
   Guardian      Guardian      @relation(fields: [guardianId], references: [id])
   Class         Class         @relation(fields: [classId], references: [id])
   Payment       Payment?      @relation(fields: [paymentId], references: [id])
+
+  PaymentStatusHistory PaymentStatusHistory[]
 }
 
 model Attendance {
@@ -270,4 +271,12 @@ model Payment {
   Enrollment Enrollment[]
 }
 
+model PaymentStatusHistory {
+  id           String        @id @default(uuid())
+  enrollmentId String
+  status       PaymentStatus
+  changedAt    DateTime      @default(now())
+  Enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id])
 
+  @@index([enrollmentId])
+}

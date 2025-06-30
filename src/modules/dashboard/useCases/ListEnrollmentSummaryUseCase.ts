@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { prisma } from '../../../../shared/infra/prisma/client';
+import { prisma } from '@shared/infra/database/prisma';
 
 @injectable()
 export class ListEnrollmentSummaryUseCase {
