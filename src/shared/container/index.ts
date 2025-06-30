@@ -1,5 +1,4 @@
 import { container } from 'tsyringe';
-
 import { IAttendanceRepository } from '../../modules/Attendance/repositories/IAttendanceRepository';
 import { PrismaAttendanceRepository } from '../../modules/Attendance/repositories/ORM/PrismaAttendanceRepository';
 import { IEnrollmentRepository } from '@modules/Enrollment/repositories/IEnrollmentRepository';
@@ -14,6 +13,7 @@ import { PrismaProfileRepository } from '@modules/Profile/repositories/orm/IPris
 import { IProfileRepository } from '@modules/Profile/repositories/IProfileRepository';
 import { IClassMaterialRepository } from '@modules/ClassMaterial/repositories/IClassMaterialRepository';
 import { PrismaClassMaterialRepository } from '@modules/ClassMaterial/repositories/ORM/PrismaClassMaterialRepository';
+
 
 container.registerSingleton<IUserRepository>(
   'UserRepository',
@@ -51,3 +51,4 @@ container.registerSingleton<IProfileRepository>(
   'ProfileRepository',
   PrismaProfileRepository,
 );
+
