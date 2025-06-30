@@ -13,7 +13,7 @@ import { PrismaProfileRepository } from '@modules/Profile/repositories/orm/IPris
 import { IProfileRepository } from '@modules/Profile/repositories/IProfileRepository';
 import { IClassMaterialRepository } from '@modules/ClassMaterial/repositories/IClassMaterialRepository';
 import { PrismaClassMaterialRepository } from '@modules/ClassMaterial/repositories/ORM/PrismaClassMaterialRepository';
-import { IGradeRepository } from "../../modules/Average/repositories/IGradeRepository";
+import { IGradeRepository } from "../../modules/Average/repositories/IGradeAverageRepository";
 import { PrismaGradeRepository } from "../../modules/Average/repositories/ORM/PrismaGradeRepository";
 
 

@@ -1,4 +1,4 @@
-export interface IGradeDTO {
+export interface IGradeAverageDTO {
   gradeReportId: string;
   activityId: string;
   value: number;

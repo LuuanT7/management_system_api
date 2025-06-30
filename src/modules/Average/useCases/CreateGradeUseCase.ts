@@ -1,15 +1,15 @@
 import { inject, injectable } from "tsyringe";
-import { IGradeRepository } from "../repositories/IGradeRepository";
-import { IGradeDTO } from "../dtos/IGradeDTO";
+import { IGradeAverageRepository } from "../repositories/IGradeAverageRepository";
+import { IGradeAverageDTO } from "../dtos/IGradeAverageDTO";
 
 @injectable()
 export class CreateGradeUseCase {
   constructor(
     @inject("GradeRepository")
-    private gradeRepository: IGradeRepository
+    private gradeRepository: IGradeAverageRepository
   ) {}
 
-  async execute(data: IGradeDTO): Promise<void> {
+  async execute(data: IGradeAverageDTO): Promise<void> {
     await this.gradeRepository.create(data);
   }
 }
