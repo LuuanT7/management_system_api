@@ -3,3 +3,10 @@ export interface IWelcomeRequest {
     email: string;
     password: string;
 }
+
+export interface ITokenRequest {
+    name: string;
+    token: string;
+    email: string;
+
+}

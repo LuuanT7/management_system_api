@@ -1,4 +1,3 @@
-import { Role } from "@prisma/client";
 import { ICreateStudentDTO } from "../Student/DTOS/IStudentDTO";
 import { IGuardianDTO } from "../Guardian/DTOS/IGuardianDTO";
 import { ITeacherResponseDTO } from "../Teacher/DTOS/ITeacherDTO";
@@ -44,11 +43,21 @@ export interface IUpdateUserDTO {
 
 }
 
+export interface IResetPassword {
+  resetToken?: string
+  expiresIn?: Date
+  newPassword?: string,
+  againNewPassword?: string,
+  userId?: string
+  email?: string
+}
 
 export interface IFindAllQueryParamsDTO {
   page?: number;
   limit?: number;
   search?: string;
 }
+
+
 
 

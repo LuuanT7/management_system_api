@@ -9,19 +9,15 @@ export class EtherealMailProvider implements IMailProvider {
     private client: Transporter;
 
     constructor() {
-        nodemailer.createTestAccount().then(account => {
-            const transporter = nodemailer.createTransport({
-                host: account.smtp.host,
-                port: account.smtp.port,
-                secure: account.smtp.secure,
-                auth: {
-                    user: account.user,
-                    pass: account.pass,
-                },
-            });
-
-            this.client = transporter;
-        }).catch(err => console.error("Failed to create test email account:", err));
+        this.client = nodemailer.createTransport({
+            host: process.env.ETHEREAL_HOST,
+            port: Number(process.env.ETHEREAL_PORT),
+            secure: false,
+            auth: {
+                user: process.env.ETHEREAL_USER,
+                pass: process.env.ETHEREAL_PASS,
+            },
+        });
     }
 
     async sendMail({ to, from, subject, templateData }: any): Promise<void> {

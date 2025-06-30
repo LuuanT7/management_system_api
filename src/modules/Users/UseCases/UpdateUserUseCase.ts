@@ -15,7 +15,7 @@ export class UpdateUserUseCase {
   constructor(
     @inject('UserRepository')
     private userRepository: IUserRepository,
-  ) {}
+  ) { }
 
   async execute(data: IUpdateUserDTO): Promise<IUpdateUserDTO> {
     const { id } = updateUserSchema.parse(data);

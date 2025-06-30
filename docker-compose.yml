@@ -13,10 +13,6 @@ services:
     restart: unless-stopped
     environment:
       - NODE_PORT=3000
-      - PORT=3000
-    ports:
-      - '3000:3000'
-      - '5555:5555'
     expose:
       - 3000
       - 5555

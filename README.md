@@ -41,103 +41,99 @@ Suba os containers:
 
 docker-compose up --build
 
-Entre no bash do container node
-
-docker compose exec -it node_management_system_container bash
-
 Execute o codigo:
 
 npx prisma migrate dev
 
-Para que crie as migrations
+Para que crie as migrations localmente
 
-Para pré popular o banco use o comando dentro do bash
+Para  popular o banco com algumas informações para teste use o comando
+
+docker compose exec -it node_management_system_container bash
+
+para que entre no bash do container node e execute o comando
 
 npm run prisma:seed
 
-para que execute as seeds e crie os usuarios admins entre outros dados.
+para executar as seeds e crie os usuarios admins entre outros dados.
 
 Acesse a aplicação:
 
-API: http://localhost:8080/api
+API: http://localhost:8080/v1
 
 📌 Endpoints principais da API
 
 👤 Usuários
 
-➕ Criar usuário
+ /v1/users 
 
-POST /api/users/create
-(define tipo de usuário: guardian, teacher ou student)
+A partir desta rota temos tudo referente ao endpoint de usuários
+
+(definição do tipo de usuário: guardian, teacher ou student, somente admins podem criar e especificar a role do usuário)
 
 📝 Matrículas (Enrollment)
 
-➕ Matricular aluno
+/v1/enrollment
 
-POST /api/enrollment/create
+A partir desta rota temos tudo referente ao endpoint de matrículas.
 
 📆 Presença (Attendance)
 
-📌 Marcar presença
+v1/attendance
 
-#Em desenvolvimento...
-
-📋 Listar presenças por aluno ou data
-
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de marcação de presença
 
 🏫 Classe (Class)
 
-➕ Criar classe
+v1/class
 
-#Em desenvolvimento...
-
-📋 Listar classes
-
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de Aulas.
 
 📊 Boletim (GradeReport)
 
-➕ Criar boletim do aluno
+v1/grade-report
 
-#Em desenvolvimento...
-
-📋 Consultar boletim por aluno
-
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de boletins;
 
 🧮 Notas (Grade)
 
-➕ Registrar nota
+v1/grade
 
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de notas das atividades;
 
 📝 Atividades (Activity)
 
-➕ Criar avaliação
+v1/grade
 
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de notas das atividades;
 
 📚 Materiais de Aula (ClassMaterial)
 
-➕ Adicionar material
+v1/grade
 
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de notas das atividades;
 
 🔔 Notificações
 
-➕ Criar notificação
+v1/notifications
 
-#Em desenvolvimento...
+A partir desta rota temos tudo referente ao endpoint de notificações;
 
 Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outros.
 
 💰 Pagamentos (Payment)
 
-➕ Registrar pagamento
+v1/payment
+
+A partir desta rota temos tudo referente ao endpoint de pagamentos;
+
 #Em desenvolvimento...
 
 📋 Histórico de pagamentos
+
+v1/payment-history
+
+A partir desta rota temos tudo referente ao endpoint de historico de pagamentos;
 
 #Em desenvolvimento...
 
@@ -149,15 +145,15 @@ Usos: alerta de presença, notas lançadas, pendência de pagamento, entre outro
 
 As credenciais estão no arquivo .env. Exemplo:
 
-POSTGRES_HOST=postgres_container
+POSTGRES_USER=postgres
+
+POSTGRES_PASSWORD=postgres
+
+POSTGRES_DB=management_system
 
 POSTGRES_PORT=5432
 
-POSTGRES_USER=usuario
-
-POSTGRES_PASSWORD=senha
-
-POSTGRES_DB=school_db
+POSTGRES_HOST=postgres_management_system_container
 
 🌐 Configuração Nginx
 
