@@ -2,15 +2,13 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { FindAttendancesByGuardianUseCase } from "../../../UseCases/FindAttendancesByGuardianUseCase";
 
-export const findAttendancesByGuardianController = async (req: Request, res: Response) => {
-  try {
+export class FindAttendancesByGuardianController {
+  async handle(req: Request, res: Response): Promise<Response> {
     const { guardianId } = req.params;
 
-    const usecase = container.resolve(FindAttendancesByGuardianUseCase);
-    const attendances = await usecase.execute(guardianId);
+    const useCase = container.resolve(FindAttendancesByGuardianUseCase);
+    const result = await useCase.execute(guardianId);
 
-    return res.json(attendances);
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
+    return res.status(200).json(result);
   }
-};
+}

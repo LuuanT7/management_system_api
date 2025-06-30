@@ -2,15 +2,14 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { FindByIdAttendanceUseCase } from "../../../UseCases/FindClassesByTeacherUseCase";
 
-export const findClassesByTeacherController = async (req: Request, res: Response) => {
-  const { id } = req.params;
+export class FindClassesByTeacherController {
+  async handle(req: Request, res: Response): Promise<Response> {
+    const { teacherId } = req.params;
 
-  try {
     const useCase = container.resolve(FindByIdAttendanceUseCase);
-    const classes = await useCase.execute(id);
-    return res.status(200).json(classes);
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Erro ao buscar as turmas do professor." });
+    const result = await useCase.execute(teacherId);
+
+    return res.status(200).json(result);
   }
-};
+}
+
