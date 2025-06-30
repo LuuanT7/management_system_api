@@ -1,4 +1,4 @@
-import { PrismaClient, Activity, ActivityType } from "@prisma/client";
+import { PrismaClient, Activity } from "@prisma/client";
 import { ICreateActivityDTO } from "../../dtos/ICreateActivityDTO";
 
 export class PrismaActivityRepository {
@@ -23,41 +23,37 @@ export class PrismaActivityRepository {
     return activity;
   }
 
-  async findById(id: string): Promise<Activity | null> {
-    return this.prisma.activity.findUnique({
-      where: { id },
+  async listAll(): Promise<Activity[]> {
+    return this.prisma.activity.findMany({
+      orderBy: { createdAt: "desc" },
     });
   }
 
-  async findByClass(classId: string): Promise<Activity[]> {
+  async listByClassId(classId: string): Promise<Activity[]> {
     return this.prisma.activity.findMany({
       where: { classId },
-      orderBy: { dueDate: 'asc' },
+      orderBy: { dueDate: "asc" },
     });
   }
 
-  async update(id: string, data: Partial<ICreateActivityDTO>): Promise<Activity> {
-    return this.prisma.activity.update({
-      where: { id },
-      data: {
-        title: data.title,
-        description: data.description,
-        type: data.type,
-        dueDate: data.dueDate,
-        maxScore: data.maxScore,
+  async listByStudentId(studentRA: number): Promise<Activity[]> {
+    return this.prisma.activity.findMany({
+      where: {
+        Class: {
+          Enrollments: {
+            some: {
+              studentRA: studentRA,
+            },
+          },
+        },
       },
+      orderBy: { dueDate: "asc" },
     });
   }
 
   async delete(id: string): Promise<void> {
     await this.prisma.activity.delete({
       where: { id },
-    });
-  }
-
-  async listAll(): Promise<Activity[]> {
-    return this.prisma.activity.findMany({
-      orderBy: { createdAt: 'desc' },
     });
   }
 }

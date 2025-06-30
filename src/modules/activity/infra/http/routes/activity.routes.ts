@@ -11,7 +11,7 @@ const activityRoutes = Router();
 const activityRepository = new PrismaActivityRepository();
 
 // Instâncias dos use cases com injeção de dependência
-const createActivityUseCase = new CreateActivityUseCase(activityRepository);
+const createActivityUseCase = new CreateActivityUseCase();
 const listActivitiesUseCase = new ListActivitiesUseCase(activityRepository);
 
 // Instâncias dos controllers
