@@ -2,12 +2,10 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { FindAllAttendanceUseCase } from "../../../UseCases/FindAllAttendanceUsecase";
 
-export const findAllAttendanceController = async (req: Request, res: Response) => {
-    try {
-        const usecase = container.resolve(FindAllAttendanceUseCase);
-        const attendances = await usecase.execute();
-        return res.json(attendances);
-    } catch (err: any) {
-        return res.status(err.statusCode || 400).json({ error: err.message });
-    }
-};
+export class FindAllAttendanceController {
+  async handle(req: Request, res: Response): Promise<Response> {
+    const useCase = container.resolve(FindAllAttendanceUseCase);
+    const result = await useCase.execute();
+    return res.status(200).json(result);
+  }
+}

@@ -2,12 +2,22 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { UpdateAttendanceUseCase } from "../../../UseCases/UpdateAttendanceUsecase";
 
-export const updateAttendanceController = async (req: Request, res: Response) => {
-    try {
-        const usecase = container.resolve(UpdateAttendanceUseCase);
-        const updated = await usecase.execute(req.params.id, req.body);
-        return res.json(updated);
-    } catch (err: any) {
-        return res.status(err.statusCode || 400).json({ error: err.message });
-    }
-};
+export class UpdateAttendanceController {
+  async handle(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const { present } = req.body;
+
+    const useCase = container.resolve(UpdateAttendanceUseCase);
+
+    const result = await useCase.execute(id, {
+        present,
+        id: "",
+        studentId: "",
+        classId: "",
+        date: undefined
+    });
+
+    return res.status(200).json(result);
+  }
+}
+

@@ -2,6 +2,8 @@ import { routes } from '@shared/infra/http/routes';
 import express from 'express';
 import 'dotenv'
 import '@shared/container'
+import '@shared/container/providers'
+
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocs from '@shared/documents/swagger.json';
 

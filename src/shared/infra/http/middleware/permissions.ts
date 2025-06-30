@@ -1,52 +1,78 @@
-import { Request, Response, NextFunction } from 'express';
+import { prisma } from '@shared/infra/database/prisma';
+import { NextFunction, Request, Response } from 'express';
 
-// Configuração direta das permissões
-const permissions = {
-  ADMIN: {
-    'v1/users': ['GET', 'POST', 'PUT', 'DELETE'],
-  },
-  TEACHER: {
-    'v1/users': ['GET'],
-  },
-  GUARDIAN: {
-    'v1/users/:id': ['GET'],
-   
-  },
-  STUDENT: {  
-    'v1/users/:id': ['GET'],
+const permission = (allowedRoles: string[]) => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      // 1. Verifica se o usuário está autenticado e tem uma role
+      if (!req.user || !req.user.role) {
+        res.status(401).send({
+          success: false,
+          message: 'Acesso não autorizado: usuário não autenticado',
+        });
+        return;
+      }
 
-  }
+      if (req.user.role === "GUARDIAN" || req.user.role === "STUDENT") {
+        const guardian = await prisma.guardian.findFirst({
+          where: { userId: req.user.id },
+          include: {
+            Enrollment: {
+              where: {
+                active: true
+              }
+            }
+          }
+        });
 
+        if (guardian && guardian.Enrollment.length === 0) {
+          res.status(403).send({
+            success: false,
+            message: `Acesso negado: Não há matriculas ativas! Ative-a para ter acesso`,
+          });
+          return;
+        }
+      }
+
+      if (req.user.role === "STUDENT") {
+        const student = await prisma.student.findUnique({
+          where: { userId: req.user.id },
+          include: {
+            Enrollments: {
+              where: { active: true }
+            }
+          }
+        });
+
+        if (!student || student.Enrollments.length === 0) {
+          res.status(403).send({
+            success: false,
+            message: 'Acesso negado: Estudante não encontrado ou sem matrículas ativas',
+          });
+          return;
+        }
+      }
+
+      // 2. Verifica se a role do usuário está entre as permitidas
+      if (allowedRoles.includes(req.user.role)) {
+        next(); // Acesso permitido
+        return;
+      }
+
+      // Se chegou aqui, não tem permissão
+      res.status(403).send({
+        success: false,
+        message: `Acesso negado: a role ${req.user.role} não tem permissão para esta ação`,
+      });
+
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({
+        success: false,
+        message: 'Erro interno do servidor',
+      });
+    }
+  };
 };
 
-export function checkPermission(req: Request, res: Response, next: NextFunction) {
-  const user = req.user; // Assume que o usuário está autenticado
-  const { path, method } = req;
-  
-
-  if (!user || !user.role) {
-    return res.status(401).json({ error: 'Usuário não autenticado' });
-  }
-
-  const rolePermissions = permissions[user.role];
-
-  if (!rolePermissions) {
-    return res.status(403).json({ error: 'Role não encontrada' });
-  }
-
-  // Encontra a rota mais específica que corresponde
-  const matchingRoute = Object.keys(rolePermissions)
-    .filter(route => path.startsWith(route))
-    .sort((a, b) => b.length - a.length)[0];
-
-  if (!matchingRoute) {
-    return res.status(403).json({ error: 'Rota não permitida' });
-  }
-
-  // Verifica se o método é permitido
-  if (!rolePermissions[matchingRoute].includes(method)) {
-    return res.status(403).json({ error: 'Método não permitido' });
-  }
-
-  next();
-}
+export default permission;

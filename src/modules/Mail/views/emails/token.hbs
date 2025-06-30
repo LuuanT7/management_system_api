@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        .container {
+            width: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content {
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .token {
+            font-size: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bem-vindo ao Sistema de Gestão!</h1>
+        </div>
+
+        <div class="content">
+            <p>Olá, {{name}}!</p>
+
+            <p>Caso esteja tentando atualizar sua senha, utilize o token a seguir!</p>
+
+            <p class="token">{{token}}</p>
+
+            {{!-- <a href="{{link}}" class="button">Acessar o Sistema</a> --}}
+
+            <p>Se você tiver alguma dúvida, não hesite em nos contatar.</p>
+
+            <p>Atenciosamente,<br>
+                Equipe do Sistema de Gestão</p>
+        </div>
+    </div>
+</body>
+
+</html>

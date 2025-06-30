@@ -1,6 +1,6 @@
-import { IUserRepository } from "@modules/Users/repositories/IUserRepository";
 import { inject, injectable } from "tsyringe";
 import { z } from "zod";
+import { IUserRepository } from "../Repositories/IUserRepository";
 
 const findByIdSchema = z.object({
   id: z.string().uuid({

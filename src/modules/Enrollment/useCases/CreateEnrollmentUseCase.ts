@@ -3,6 +3,7 @@ import { z } from "zod";
 import { AppError } from "@shared/errors/AppError";
 import { IEnrollmentRepository } from "../repositories/IEnrollmentRepository";
 import { ICreateEnrollmentDTO } from "../DTOS/IEnrollmentDTO";
+import { PaymentStatus } from "@prisma/client";
 
 const createEnrollmentSchema = z.object({
     studentId: z.string({
@@ -18,7 +19,10 @@ const createEnrollmentSchema = z.object({
     guardianId: z.string({
         required_error: "ID do responsável é obrigatório",
         invalid_type_error: "ID do responsável deve ser uma string"
-    }).uuid("ID do responsável inválido"),
+    }).uuid("ID do responsável inválido"),  
+    paymentStatus: z.nativeEnum(PaymentStatus).optional(),
+    active: z.boolean().optional(),
+    paymentId: z.string().optional(),
 }).required().strict();
 
 @injectable()
@@ -36,8 +40,9 @@ export class CreateEnrollmentUseCase {
                 studentId,
                 classId,
                 guardianId,
-                paymentStatus: "PENDING",
-                active: true
+                paymentStatus: data.paymentStatus,
+                active: data.active,
+                paymentId: data.paymentId,
             });
 
             return enrollment;
