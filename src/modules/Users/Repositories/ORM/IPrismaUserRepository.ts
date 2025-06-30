@@ -2,6 +2,7 @@ import {
   IUserDTO,
   ICreateUserDTO,
   IUpdateUserDTO,
+  IResetPassword,
 } from '@modules/Users/DTOS/IUserDTO';
 import { prisma } from '@shared/infra/database/prisma';
 import { Prisma } from '@prisma/client';
@@ -131,5 +132,9 @@ export class IPrismaUserRepository implements IUserRepository {
       where: { id },
     });
     return id;
+  }
+  async generateResetToken({ resetToken, expiresIn, userId }: IResetPassword): Promise<IResetPassword> {
+    const resetPssword = await prisma.resetUserPassword.create({ data: { resetToken, expiresIn, userId } })
+    return resetPssword
   }
 }

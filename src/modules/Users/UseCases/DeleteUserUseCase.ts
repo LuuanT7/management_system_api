@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
-import { IUserRepository } from "../repositories/IUserRepository";
 import { z } from "zod";
+import { IUserRepository } from "../Repositories/IUserRepository";
 
 const deleteUserSchema = z.object({
   id: z.string().uuid({

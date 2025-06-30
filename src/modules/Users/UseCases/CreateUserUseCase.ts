@@ -47,7 +47,6 @@ const createUserSchema = z
       .optional()
       .transform((val) => (val ? new Date(val) : undefined)),
   })
-  .required()
   .strict();
 
 @injectable()
@@ -57,7 +56,7 @@ export class CreateUserUseCase {
   constructor(
     @inject('UserRepository')
     private userRepository: IUserRepository,
-  ) {}
+  ) { }
 
   async execute(data: ICreateUserDTO): Promise<ICreateUserDTO> {
     try {

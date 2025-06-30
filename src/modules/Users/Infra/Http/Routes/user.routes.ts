@@ -33,6 +33,7 @@ userRoutes.post(
   permission(['ADMIN']),
   createUserController.handle,
 );
+
 userRoutes.put(
   '/update/:id',
   authenticate,
