@@ -1,7 +1,7 @@
 import { IStudentDTO } from '@modules/Users/Student/DTOS/IStudentDTO';
 import { IUserAddressDTO } from '@modules/Users/UserAddress/DTOS/IUserAddressDTO';
 import { IUserDTO } from '@modules/Users/DTOS/IUserDTO';
-import { IClassDTO } from '@modules/Class/DTOS/IClassDTO';
+import { IClassDTO } from '@modules/Class/dtos/IClassDTO';
 import { IEnrollmentDTO } from '@modules/Enrollment/DTOS/IEnrollmentDTO';
 import { IAttendanceDTO } from '@modules/Attendance/dtos/IAttendenceDTO';
 import { IGuardianDTO } from '@modules/Users/Guardian/DTOS/IGuardianDTO';
