@@ -156,6 +156,10 @@ model Class {
   subject       String
   shift         Shift           @default(MORNING)
   teacherId     String
+  startTime     String          // Horário de início (ex: "08:00")
+  endTime       String          // Horário de término (ex: "10:00")
+  createdAt     DateTime        @default(now())
+  
   teacher       Teacher         @relation(fields: [teacherId], references: [id])
   Enrollments   Enrollment[]
   Attendance    Attendance[]
@@ -163,6 +167,7 @@ model Class {
   Activity      Activity[]
   ClassMaterial ClassMaterial[]
 }
+
 
 // Modelo de Boletim Escolar
 model GradeReport {
