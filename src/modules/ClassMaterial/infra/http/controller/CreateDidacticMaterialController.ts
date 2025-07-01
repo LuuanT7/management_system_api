@@ -2,22 +2,21 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { CreateClassMaterialUseCase } from "../../../UseCases/CreateClassMaterialUseCase";
 
-export const createDidacticMaterialController = async (req: Request, res: Response) => {
-  try {
-    const { title, description, fileUrl, classId, isPublished } = req.body;
+export class CreateDidacticMaterialController {
+  async handle(req: Request, res: Response): Promise<Response> {
+    const { classId, title, description, fileUrl, isPublished } = req.body;
 
-    const usecase = container.resolve(CreateClassMaterialUseCase);
+    const useCase = container.resolve(CreateClassMaterialUseCase);
 
-    const material = await usecase.execute({
+    const material = await useCase.execute({
+      classId,
       title,
       description,
       fileUrl,
-      classId,
-      isPublished
+      isPublished,
     });
 
     return res.status(201).json(material);
-  } catch (error: any) {
-    return res.status(400).json({ error: error.message });
   }
-};
+}
+
